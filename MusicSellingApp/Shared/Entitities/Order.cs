@@ -3,12 +3,12 @@
     public class Order
     {
         public Album Album { get; set; }
-        public int quantity;
+        public int Quantity { get; set; }
 
         public Order(Album album, int quantity)
         {
             Album = album;
-            this.quantity = quantity;
+            Quantity = quantity;
         }
     }
 }
