@@ -9,13 +9,18 @@ namespace MusicSellingApp.Shared.Entitities
         public long Id  { get;set; }
         public int Age { get; set; }
 
-        public Account account { get; set; }
+        public Account Account { get; set; }
 
-        protected User(long id, int age, Account account)
+        public User()
+        {
+
+        }
+
+        public User(long id, int age, Account account)
         {
             Id = id;
             Age = age;
-            this.account = account;
+            Account = account;
         }
     }
 }

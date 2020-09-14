@@ -12,6 +12,11 @@ namespace MusicSellingApp.Shared.Entitities
 
         public List<Album> Discography { get; set; }
 
+        public Artist()
+        {
+
+        }
+
         public Artist(string name, DateTime careerBeginDate, string description, List<Album> discography, long id, int age, Account account)  : base(id, age, account)
         {
           

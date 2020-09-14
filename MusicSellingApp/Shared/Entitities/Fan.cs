@@ -10,6 +10,11 @@ namespace MusicSellingApp.Shared.Entitities
         public string LastName { get; set; }
         public List<Album> Library { get; set; }
 
+        public Fan()
+        {
+
+        }
+
         public Fan(string firstName, string lastName, List<Album> library,long id,int age,Account account) : base(id, age, account)
         {
             FirstName = firstName;

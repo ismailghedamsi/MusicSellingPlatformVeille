@@ -4,10 +4,8 @@ using System.Text;
 
 namespace MusicSellingApp.Shared.Entitities
 {
-    public class Cart
+    public class Song
     {
         public long Id { get; set; }
-        public Fan fan { get; set; }
-        public List<Order> orders;
     }
 }

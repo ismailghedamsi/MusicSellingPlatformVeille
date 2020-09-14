@@ -4,10 +4,10 @@ using System.Text;
 
 namespace MusicSellingApp.Shared.Entitities
 {
-    public class Cart
+    public class TrackList
     {
-        public long Id { get; set; }
-        public Fan fan { get; set; }
-        public List<Order> orders;
+        public int Id { get; set; }
+        public virtual ICollection<Song> Songs { get; set; }
     }
+
 }
