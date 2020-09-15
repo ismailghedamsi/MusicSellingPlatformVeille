@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace MusicSellingApp.Shared.Entitities
 {
     public class Fan : User
     {
+        [Required]
+        [MinLength(2)]
+        [MaxLength(30)]
         public string FirstName { get; set; }
+        [Required]
+        [MinLength(2)]
+        [MaxLength(30)]
         public string LastName { get; set; }
         public List<Album> Library { get; set; }
 

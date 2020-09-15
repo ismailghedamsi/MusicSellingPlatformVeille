@@ -3,6 +3,12 @@
     
 
 <EditForm Model="@user" OnValidSubmit="@Validate">
+
+    <div class="form-group">
+        <label>Age : </label>
+        <InputNumber class="form-control" @bind-Value="user.Age" />
+    </div>
+
     @if (TypeOf(@user) == "Artist")
     {
         <div class="form-group">
@@ -56,8 +62,6 @@
 <h1>@{Console.WriteLine("the type is " +user.GetType().Name); }</h1>
 @code {
 
-    public Artist artist = new Artist();
-    public Fan fan = new Fan();
     User user = new Artist();
     public string userType = "Artist";
     InputSelect<string> inputSelect;
