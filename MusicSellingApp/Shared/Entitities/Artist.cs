@@ -7,22 +7,29 @@ namespace MusicSellingApp.Shared.Entitities
     public class Artist : User
     {
         public string Name { get; set; }
-        public DateTime CareerBeginDate { get; set; }
+        public DateTime? CareerBeginDate { get; set; }
         public string Description { get; set; }
 
         public List<Album> Discography { get; set; }
+
+        public override string ToString()
+        {
+            return Name + "\n" + CareerBeginDate.ToString() + "\n" + Description;
+        }
 
         public Artist()
         {
 
         }
 
-        public Artist(string name, DateTime careerBeginDate, string description, List<Album> discography, long id, int age, Account account)  : base(id, age, account)
+        public Artist(string name, DateTime? careerBeginDate, string description, List<Album> discography, long id, int age, Account account)  : base(id, age, account)
         {
           
             CareerBeginDate = careerBeginDate;
             Description = description;
             Discography = discography;
+            Name = name;
+
         }
     }
 }
