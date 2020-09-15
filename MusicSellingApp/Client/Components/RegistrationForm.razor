@@ -3,7 +3,8 @@
     
 
 <EditForm Model="@user" OnValidSubmit="@Validate">
-
+    <DataAnnotationsValidator />
+    <ValidationSummary />
     <div class="form-group">
         <label>Age : </label>
         <InputNumber class="form-control" @bind-Value="user.Age" />
@@ -108,6 +109,6 @@
     public void Validate()
     {
         Console.WriteLine(user);
-        //NavigationManager.NavigateTo("counter");
+        NavigationManager.NavigateTo("counter");
     }
 }
