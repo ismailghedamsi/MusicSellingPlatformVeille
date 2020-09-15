@@ -16,7 +16,12 @@ namespace MusicSellingApp.Shared.Entitities
 
         public User()
         {
+            Account = new Account();
+        }
 
+        public User(Account account)
+        {
+            Account = account;
         }
 
         public User(long id, int age, Account account)
