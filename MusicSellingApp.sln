@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicSellingApp.Server", "MusicSellingApp\Server\MusicSellingApp.Server.csproj", "{13516F47-3361-4278-B8EE-C7752A23C939}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicSellingApp.Server", "MusicSellingApp\Server\MusicSellingApp.Server.csproj", "{13516F47-3361-4278-B8EE-C7752A23C939}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicSellingApp.Client", "MusicSellingApp\Client\MusicSellingApp.Client.csproj", "{11B5250B-C2CB-4E68-81EB-F891A20D62D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicSellingApp.Client", "MusicSellingApp\Client\MusicSellingApp.Client.csproj", "{11B5250B-C2CB-4E68-81EB-F891A20D62D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicSellingApp.Shared", "MusicSellingApp\Shared\MusicSellingApp.Shared.csproj", "{DFDFFC99-B516-4C33-B207-6E01E0A040C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicSellingApp.Shared", "MusicSellingApp\Shared\MusicSellingApp.Shared.csproj", "{DFDFFC99-B516-4C33-B207-6E01E0A040C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
