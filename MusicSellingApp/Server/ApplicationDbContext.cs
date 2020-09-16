@@ -19,7 +19,6 @@ namespace MusicSellingApp.Server
 
         public DbSet<TodoItem> Todos { get; set; }
         public DbSet<Account> Accounts { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Artist> Artists { get; set; }
         public DbSet<Fan> Fans { get; set; }

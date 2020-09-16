@@ -5,8 +5,10 @@ using System.Text;
 
 namespace MusicSellingApp.Shared.Entitities
 {
-    public class Artist : User
+    public class Artist 
     {
+
+        public long Id { get; set; }
         [Required]
         [MinLength(2)]
         [MaxLength(30)]
@@ -16,7 +18,7 @@ namespace MusicSellingApp.Shared.Entitities
         [Required]
         public string Description { get; set; }
 
-        public List<Album> Discography { get; set; }
+        //public List<Album> Discography { get; set; }
 
         public override string ToString()
         {
@@ -28,12 +30,12 @@ namespace MusicSellingApp.Shared.Entitities
 
         }
 
-        public Artist(string name, DateTime? careerBeginDate, string description, List<Album> discography, long id, int age, Account account)  : base(id, age, account)
+        public Artist(string name, DateTime? careerBeginDate, string description)  
         {
           
             CareerBeginDate = careerBeginDate;
             Description = description;
-            Discography = discography;
+            //Discography = discography;
             Name = name;
 
         }

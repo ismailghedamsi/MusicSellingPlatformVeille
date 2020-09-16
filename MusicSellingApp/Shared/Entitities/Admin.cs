@@ -4,9 +4,9 @@ using System.Text;
 
 namespace MusicSellingApp.Shared.Entitities
 {
-    public class Admin : User
+    public class Admin 
     {
- 
+        public long Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
@@ -16,7 +16,7 @@ namespace MusicSellingApp.Shared.Entitities
         }
 
     
-        public Admin(string firstName, string lastName,long Id,int age,Account account) : base(Id,age, account)
+        public Admin(string firstName, string lastName,long Id,int age,Account account) 
         {
             FirstName = firstName;
             LastName = lastName;

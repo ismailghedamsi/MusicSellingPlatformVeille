@@ -5,8 +5,9 @@ using System.Text;
 
 namespace MusicSellingApp.Shared.Entitities
 {
-    public class Fan : User
+    public class Fan 
     {
+        public long Id { get; set; }
         [Required]
         [MinLength(2)]
         [MaxLength(30)]
@@ -27,7 +28,7 @@ namespace MusicSellingApp.Shared.Entitities
             Library = new List<Album>();
         }
 
-        public Fan(string firstName, string lastName, List<Album> library,long id,int age,Account account) : base(id, age, account)
+        public Fan(string firstName, string lastName, List<Album> library,long id,int age,Account account) 
         {
             FirstName = firstName;
             LastName = lastName;
@@ -37,9 +38,6 @@ namespace MusicSellingApp.Shared.Entitities
         public override bool Equals(object obj)
         {
             return obj is Fan fan &&
-                   Id == fan.Id &&
-                   Age == fan.Age &&
-                   EqualityComparer<Account>.Default.Equals(Account, fan.Account) &&
                    FirstName == fan.FirstName &&
                    LastName == fan.LastName &&
                    EqualityComparer<List<Album>>.Default.Equals(Library, fan.Library);
@@ -47,7 +45,7 @@ namespace MusicSellingApp.Shared.Entitities
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, Age, Account, FirstName, LastName, Library);
+            return HashCode.Combine(FirstName, LastName, Library);
         }
     }
 }

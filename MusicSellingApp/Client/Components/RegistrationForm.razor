@@ -12,70 +12,24 @@
 <h3>RegistrationForm</h3>
 
 
-<EditForm Model="@user" OnValidSubmit="@Validate">
+<EditForm Model="@artist" OnValidSubmit="@Validate">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div class="form-group">
-        <label>Age : </label>
-        <InputNumber class="form-control" @bind-Value="user.Age" />
-    </div>
-
-    @if (TypeOf(@user) == "Artist")
-    {
-        <div class="form-group">
-            <label>Artist Name : </label>
-            <InputText class="form-control" @bind-Value="((Artist)user).Name" />
-        </div>
-    }
-    else
-    {
-        <div class="form-group">
-            <label>First Name : </label>
-            <InputText class="form-control" @bind-Value="((Fan)user).FirstName" />
-        </div>
-
-        <div class="form-group">
-            <label>Last Name : </label>
-            <InputText class="form-control" @bind-Value="((Fan)user).LastName" />
-        </div>
-    }
-
-    @if (TypeOf(@user) == "Artist")
-    {
-        <div class="form-group">
-            <label>Biography : </label>
-            <InputText class="form-control" @bind-Value="((Artist)user).Description" />
-        </div>
-
-        <div class="form-group">
-            <label>Career Begin Date : </label>
-            <InputDate @bind-Value="((Artist)user).CareerBeginDate" />
-        </div>
-    }
 
     <div class="form-group">
-        <label>Email : </label>
-        <InputText @bind-Value="user.Account.Email" />
+        <label>Artist Name : </label>
+        <InputText class="form-control" @bind-Value="artist.Name" />
     </div>
 
     <div class="form-group">
-        <label>Username : </label>
-        <InputText @bind-Value="user.Account.Username" />
+        <label>Biography : </label>
+        <InputText class="form-control" @bind-Value="artist.Description" />
     </div>
 
     <div class="form-group">
-        <label>Password : </label>
-        <InputText type="password" @bind-Value="user.Account.Password" />
+        <label>Career Begin Date : </label>
+        <InputDate @bind-Value="artist.CareerBeginDate" />
     </div>
-
-
-    <div class="form-group">
-        <select value="@userType" @onchange="OnValueChanged">
-            <option value="Artist">Artist</option>
-            <option value="Fan">Fan</option>
-        </select>
-    </div>
-
 
 
     <button type="submit" class="btn btn-primary">Register </button>
@@ -88,59 +42,13 @@
         @code {
 
 
-
-
-            User user = new Artist();
-            public string userType = "Artist";
-            private Task OnValueChanged()
-            {
-                Console.WriteLine("ca rentre");
-                if (TypeOf(user) == "Artist")
-                {
-                    user = new Fan();
-                    userType = "Fan";
-                }
-                else if (TypeOf(user) == "Fan")
-                {
-                    user = new Artist();
-                    userType = "Artist";
-                }
-
-                return Task.CompletedTask;
-            }
-
-
-
-            private Task OnValueChanged(string s)
-            {
-                Console.WriteLine("ca rentre");
-                if (TypeOf(user) == "Artist")
-                {
-                    user = new Fan();
-                }
-                else if (TypeOf(user) == "Fan")
-                {
-                    user = new Artist();
-                }
-
-                return Task.CompletedTask;
-            }
-
-
-            public string TypeOf(User user)
-            {
-                return user.GetType().Name;
-            }
-
-            protected override async Task OnInitializedAsync() =>
-             await Http.PostAsJsonAsync<Artist>("api/Users", new Artist("tech nina", null, "desc", null, 1, 10, new Account()));
-
-          
+            Artist artist = new Artist();
 
             public async Task Validate()
             {
-                Artist artist = new Artist("tech nina", null, "desc", null, 1, 10, new Account());
-                await Http.PostAsJsonAsync<Artist>("api/Users", artist);
+                //Artist artist = new Artist("tech nina",DateTime.Now, "desc");
+                await Http.PostAsJsonAsync<Artist>("api/Artists", artist);
+                Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(artist));
                 //await Http.PostAsJsonAsync("api/user", artist);
                 //NavigationManager.NavigateTo("login");
             }

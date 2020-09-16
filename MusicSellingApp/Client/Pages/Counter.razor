@@ -16,7 +16,6 @@
         public async Task click()
         {
             await Http.PostAsJsonAsync<TodoItem>("api/TodoItems", new TodoItem() { Name = "Another todo item" });
-            Artist artist = new Artist("ismail", null, "desc", null, 1, 10, new Account());
-            Console.WriteLine( Newtonsoft.Json.JsonConvert.SerializeObject(artist));
+         
         }
     }
