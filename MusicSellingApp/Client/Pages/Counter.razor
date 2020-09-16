@@ -1,16 +1,22 @@
 ﻿@page "/counter"
 
-<h1>Counter</h1>
+@using System.Net.Http
+@inject HttpClient Http
 
-<p>Current count: @currentCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
-@code {
-    private int currentCount = 0;
+    <h1>@todoItems.Length</h1>
+    <button @onclick="click">Click</button>
+    @code {
+        public TodoItem[] todoItems = new TodoItem[5];
 
-    private void IncrementCount()
-    {
-        currentCount++;
+        protected override async Task OnInitializedAsync() =>
+            todoItems = await Http.GetFromJsonAsync<TodoItem[]>("api/TodoItems");
+
+        public async Task click()
+        {
+            await Http.PostAsJsonAsync<TodoItem>("api/TodoItems", new TodoItem() { Name = "Another todo item" });
+            Artist artist = new Artist("ismail", null, "desc", null, 1, 10, new Account());
+            Console.WriteLine( Newtonsoft.Json.JsonConvert.SerializeObject(artist));
+        }
     }
-}

@@ -14,6 +14,8 @@ namespace MusicSellingApp.Shared.Entitities
 
         public Account Account { get; set; }
 
+
+
         public User()
         {
             Account = new Account();

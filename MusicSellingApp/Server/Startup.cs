@@ -6,6 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Net.Http;
+using static System.Net.WebRequestMethods;
+using MusicSellingApp.Shared;
 
 namespace MusicSellingApp.Server
 {
@@ -22,7 +26,16 @@ namespace MusicSellingApp.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            /*if (!services.Any(x => x.ServiceType == typeof(HttpClient)))
+            {
+                services.AddSingleton<HttpClient>();
+            }*/
 
+                services.AddScoped<MusicSellingApp.Shared.CustomHttpClient>();
+           
+
+             
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

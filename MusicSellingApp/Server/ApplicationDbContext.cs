@@ -12,16 +12,21 @@ namespace MusicSellingApp.Server
     public class ApplicationDbContext : DbContext
     {
 
-     
-        DbSet<Account> Accounts { get; set; }
-        DbSet<User> Users { get; set; }
-        DbSet<Admin> Admins { get; set; }
-        DbSet<Artist> Artists { get; set; }
-        DbSet<Fan> Fans { get; set; }
-        DbSet<Album> Albums { get; set; }
-        DbSet<Cart> Carts { get; set; }
-        DbSet<Song> Songs { get; set; }
-        DbSet<TrackList> TrackLists { get; set; }
+       public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+
+        }
+
+        public DbSet<TodoItem> Todos { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Admin> Admins { get; set; }
+        public DbSet<Artist> Artists { get; set; }
+        public DbSet<Fan> Fans { get; set; }
+        public DbSet<Album> Albums { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<Song> Songs { get; set; }
+        public DbSet<TrackList> TrackLists { get; set; }
 
 
 

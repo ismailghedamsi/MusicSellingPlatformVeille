@@ -1,6 +1,16 @@
-﻿@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager;
+﻿
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+@using System.Text
+@using Microsoft.AspNetCore.Components
+@using MusicSellingApp.Shared
+@using System.Text.Json
+@using System.Net.Http
+@inject HttpClient Http
+
+
+
 <h3>RegistrationForm</h3>
-    
+
 
 <EditForm Model="@user" OnValidSubmit="@Validate">
     <DataAnnotationsValidator />
@@ -68,60 +78,70 @@
 
 
 
-    <button class="btn btn-primary">Register </button>
+    <button type="submit" class="btn btn-primary">Register </button>
 
 
 
 </EditForm>
-<h1>@{Console.WriteLine("the type is " +user.GetType().Name); }</h1>
-@code {
+ }
 
-    User user = new Artist();
-    public string userType = "Artist";
-    InputSelect<string> inputSelect;
+        @code {
 
 
-    private Task OnValueChanged()
-    {
-        Console.WriteLine("ca rentre");
-        if (TypeOf(user) == "Artist")
-        {
-            user = new Fan();
-            userType = "Fan";
-        }
-        else if (TypeOf(user) == "Fan")
-        {
-            user = new Artist();
-            userType = "Artist";
-        }
-
-        return Task.CompletedTask;
-    }
 
 
-    private Task OnValueChanged(string s)
-    {
-        Console.WriteLine("ca rentre");
-        if (TypeOf(user) == "Artist")
-        {
-            user = new Fan();
-        }else if(TypeOf(user) == "Fan")
-        {
-            user = new Artist();
-        }
+            User user = new Artist();
+            public string userType = "Artist";
+            private Task OnValueChanged()
+            {
+                Console.WriteLine("ca rentre");
+                if (TypeOf(user) == "Artist")
+                {
+                    user = new Fan();
+                    userType = "Fan";
+                }
+                else if (TypeOf(user) == "Fan")
+                {
+                    user = new Artist();
+                    userType = "Artist";
+                }
 
-        return Task.CompletedTask;
-    }
+                return Task.CompletedTask;
+            }
 
 
-    public string TypeOf(User user)
-    {
-        return user.GetType().Name;
-    }
 
-    public void Validate()
-    {
-        Console.WriteLine(user);
-        NavigationManager.NavigateTo("counter");
-    }
+            private Task OnValueChanged(string s)
+            {
+                Console.WriteLine("ca rentre");
+                if (TypeOf(user) == "Artist")
+                {
+                    user = new Fan();
+                }
+                else if (TypeOf(user) == "Fan")
+                {
+                    user = new Artist();
+                }
+
+                return Task.CompletedTask;
+            }
+
+
+            public string TypeOf(User user)
+            {
+                return user.GetType().Name;
+            }
+
+            protected override async Task OnInitializedAsync() =>
+             await Http.PostAsJsonAsync<Artist>("api/Users", new Artist("tech nina", null, "desc", null, 1, 10, new Account()));
+
+          
+
+            public async Task Validate()
+            {
+                Artist artist = new Artist("tech nina", null, "desc", null, 1, 10, new Account());
+                await Http.PostAsJsonAsync<Artist>("api/Users", artist);
+                //await Http.PostAsJsonAsync("api/user", artist);
+                //NavigationManager.NavigateTo("login");
+            }
 }

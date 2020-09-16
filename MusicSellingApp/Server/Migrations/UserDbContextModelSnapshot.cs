@@ -9,7 +9,7 @@ using MusicSellingApp.Server;
 namespace MusicSellingApp.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    partial class UserDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -29,14 +29,21 @@ namespace MusicSellingApp.Server.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(15);
 
                     b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(15);
 
                     b.HasKey("Id");
 
@@ -123,6 +130,24 @@ namespace MusicSellingApp.Server.Migrations
                     b.ToTable("Songs");
                 });
 
+            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.TodoItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsComplete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Todos");
+                });
+
             modelBuilder.Entity("MusicSellingApp.Shared.Entitities.TrackList", b =>
                 {
                     b.Property<int>("Id")
@@ -178,14 +203,18 @@ namespace MusicSellingApp.Server.Migrations
                 {
                     b.HasBaseType("MusicSellingApp.Shared.Entitities.User");
 
-                    b.Property<DateTime>("CareerBeginDate")
+                    b.Property<DateTime?>("CareerBeginDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
 
                     b.HasDiscriminator().HasValue("Artist");
                 });
@@ -194,9 +223,17 @@ namespace MusicSellingApp.Server.Migrations
                 {
                     b.HasBaseType("MusicSellingApp.Shared.Entitities.User");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnName("Fan_FirstName")
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnName("Fan_LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
 
                     b.HasDiscriminator().HasValue("Fan");
                 });
