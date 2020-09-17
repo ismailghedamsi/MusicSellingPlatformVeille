@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicSellingApp.Server;
 
 namespace MusicSellingApp.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200916221754_removeSongTable")]
-    partial class removeSongTable
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,35 +19,22 @@ namespace MusicSellingApp.Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Account", b =>
+            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Admin", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
+                    b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Admins");
                 });
 
             modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Album", b =>
@@ -61,9 +46,6 @@ namespace MusicSellingApp.Server.Migrations
 
                     b.Property<string>("AlbumName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("ArtistId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("Cover")
                         .HasColumnType("nvarchar(max)");
@@ -89,13 +71,57 @@ namespace MusicSellingApp.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ArtistId");
-
                     b.HasIndex("FanId");
 
                     b.HasIndex("TrackListId");
 
                     b.ToTable("Albums");
+                });
+
+            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Artist", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CareerBeginDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Artists");
                 });
 
             modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Cart", b =>
@@ -115,6 +141,45 @@ namespace MusicSellingApp.Server.Migrations
                     b.ToTable("Carts");
                 });
 
+            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Fan", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Fans");
+                });
+
             modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Song", b =>
                 {
                     b.Property<long>("Id")
@@ -129,7 +194,7 @@ namespace MusicSellingApp.Server.Migrations
 
                     b.HasIndex("TrackListId");
 
-                    b.ToTable("Song");
+                    b.ToTable("Songs");
                 });
 
             modelBuilder.Entity("MusicSellingApp.Shared.Entitities.TodoItem", b =>
@@ -162,90 +227,8 @@ namespace MusicSellingApp.Server.Migrations
                     b.ToTable("TrackLists");
                 });
 
-            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.User", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long?>("AccountId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("Users");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
-                });
-
-            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Admin", b =>
-                {
-                    b.HasBaseType("MusicSellingApp.Shared.Entitities.User");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("Admin");
-                });
-
-            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Artist", b =>
-                {
-                    b.HasBaseType("MusicSellingApp.Shared.Entitities.User");
-
-                    b.Property<DateTime?>("CareerBeginDate")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
-
-                    b.HasDiscriminator().HasValue("Artist");
-                });
-
-            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Fan", b =>
-                {
-                    b.HasBaseType("MusicSellingApp.Shared.Entitities.User");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnName("Fan_FirstName")
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnName("Fan_LastName")
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
-
-                    b.HasDiscriminator().HasValue("Fan");
-                });
-
             modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Album", b =>
                 {
-                    b.HasOne("MusicSellingApp.Shared.Entitities.Artist", null)
-                        .WithMany("Discography")
-                        .HasForeignKey("ArtistId");
-
                     b.HasOne("MusicSellingApp.Shared.Entitities.Fan", null)
                         .WithMany("Library")
                         .HasForeignKey("FanId");
@@ -267,13 +250,6 @@ namespace MusicSellingApp.Server.Migrations
                     b.HasOne("MusicSellingApp.Shared.Entitities.TrackList", null)
                         .WithMany("Songs")
                         .HasForeignKey("TrackListId");
-                });
-
-            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.User", b =>
-                {
-                    b.HasOne("MusicSellingApp.Shared.Entitities.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId");
                 });
 #pragma warning restore 612, 618
         }

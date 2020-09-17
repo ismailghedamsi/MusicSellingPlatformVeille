@@ -2,7 +2,7 @@
 
 namespace MusicSellingApp.Server.Migrations
 {
-    public partial class firstMigration : Migration
+    public partial class recreateDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
