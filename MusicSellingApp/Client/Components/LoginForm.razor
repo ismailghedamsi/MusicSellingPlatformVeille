@@ -1,6 +1,7 @@
 ﻿@using System.Net.Http
 @inject HttpClient httpClient
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+@inject ILocalStorageService storageService;
 <h3>RegistrationForm</h3>
 
 
@@ -37,6 +38,7 @@
         artists = await httpClient.GetFromJsonAsync<List<Artist>>("api/Artists");
         if (artists.Where(artist => artist.Username == credential.username && artist.Password == credential.password).Count() != 0 )
         {
+            await storageService.SetItemAsync<Artist>("Artist", artists.Where(artist => artist.Username == credential.username && artist.Password == credential.password).First());
             NavigationManager.NavigateTo("counter");
         }
         else

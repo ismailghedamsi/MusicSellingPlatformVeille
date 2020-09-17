@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MusicSellingApp.Client.Repositories;
+using Blazored.LocalStorage;
 
 namespace MusicSellingApp.Client
 {
@@ -16,6 +17,7 @@ namespace MusicSellingApp.Client
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.Services.AddBlazoredLocalStorage();
             builder.RootComponents.Add<App>("app");
             builder.Services.AddScoped(sp =>
              new HttpClient
