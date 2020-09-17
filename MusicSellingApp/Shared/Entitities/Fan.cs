@@ -28,7 +28,7 @@ namespace MusicSellingApp.Shared.Entitities
             Library = new List<Album>();
         }
 
-        public Fan(string firstName, string lastName, List<Album> library,long id,int age,Account account) 
+        public Fan(string firstName, string lastName, List<Album> library,long id,int age) 
         {
             FirstName = firstName;
             LastName = lastName;

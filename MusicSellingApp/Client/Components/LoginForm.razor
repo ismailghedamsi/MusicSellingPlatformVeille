@@ -1,8 +1,10 @@
-﻿@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager;
+﻿@using System.Net.Http
+@inject HttpClient httpClient
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 <h3>RegistrationForm</h3>
 
 
-<EditForm Model="@credential">
+<EditForm Model="@credential" OnValidSubmit="@Authenticate">
     <div class="form-group">
         <label>Username  : </label>
         <InputText @bind-Value="credential.username" />
@@ -19,6 +21,30 @@
 
 
 </EditForm>
+@if (loginError)
+{
+    <div>Wrong username or password</div>
+}
 @code {
     Credential credential = new Credential();
+    List<Artist> artists = new List<Artist>();
+    Artist oneArtist = new Artist();
+    bool loginError = false;
+    public async Task Authenticate()
+    {
+
+        //Artist artist = new Artist("tech nina",DateTime.Now, "desc");
+        artists = await httpClient.GetFromJsonAsync<List<Artist>>("api/Artists");
+        if (artists.Where(artist => artist.Username == credential.username && artist.Password == credential.password).Count() != 0 )
+        {
+            NavigationManager.NavigateTo("counter");
+        }
+        else
+        {
+            loginError = true;
+        }
+
+    }
+
+
 }

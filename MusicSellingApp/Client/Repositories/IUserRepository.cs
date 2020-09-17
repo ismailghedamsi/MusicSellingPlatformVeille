@@ -9,11 +9,11 @@ namespace MusicSellingApp.Client.Repositories
     interface IUserRepository
     {
 
-        IEnumerable<User> GetStudents();
-        User GetStudentByID(int userId);
-        void InsertUser(User user);
+        IEnumerable<Artist> GetStudents();
+        Artist GetStudentByID(int userId);
+        void InsertUser(Artist user);
         void DeleteStudent(int userID);
-        void UpdateStudent(User student);
+        void UpdateStudent(Artist student);
         void Save();
     }
 }

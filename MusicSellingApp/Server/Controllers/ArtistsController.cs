@@ -28,6 +28,15 @@ namespace MusicSellingApp.Server.Controllers
             return await _context.Artists.ToListAsync();
         }
 
+        [HttpGet("{username}")]
+        public async Task<Artist> GetArtistByUsername(string username)
+        {
+            var artist = _context.Artists.Where(artist => artist.Username == username);
+            
+            return  await artist.FirstAsync();
+        }
+
+
         // GET: api/Artists/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Artist>> GetArtist(long id)

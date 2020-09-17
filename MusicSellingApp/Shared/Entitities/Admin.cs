@@ -16,7 +16,7 @@ namespace MusicSellingApp.Shared.Entitities
         }
 
     
-        public Admin(string firstName, string lastName,long Id,int age,Account account) 
+        public Admin(string firstName, string lastName,long Id,int age) 
         {
             FirstName = firstName;
             LastName = lastName;

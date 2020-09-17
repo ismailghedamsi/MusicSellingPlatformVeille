@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace MusicSellingApp.Shared.Entitities
 {
     public class Artist 
     {
-
         public long Id { get; set; }
+        [Required]
+        [Range(10, 120, ErrorMessage = "This website is restricted for 10 years old to 120 years old person")]
+        public int Age { get; set; }
+
         [Required]
         [MinLength(2)]
         [MaxLength(30)]
@@ -18,7 +22,16 @@ namespace MusicSellingApp.Shared.Entitities
         [Required]
         public string Description { get; set; }
 
+
+        public string Username { get; set; }
+
+        public string Password { get; set; }
+
+        public string Email { get; set; }
+
+
         //public List<Album> Discography { get; set; }
+
 
         public override string ToString()
         {

@@ -18,17 +18,17 @@ namespace MusicSellingApp.Client.Repositories
             throw new NotImplementedException();
         }
 
-        public User GetStudentByID(int userId)
+        public Artist GetStudentByID(int userId)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> GetStudents()
+        public IEnumerable<Artist> GetStudents()
         {
             throw new NotImplementedException();
         }
 
-        public void InsertUser(User user)
+        public void InsertUser(Artist user)
         {
             //context.Add(user);
            // context.SaveChangesAsync();
@@ -39,7 +39,7 @@ namespace MusicSellingApp.Client.Repositories
      
         }
 
-        public void UpdateStudent(User student)
+        public void UpdateStudent(Artist student)
         {
             throw new NotImplementedException();
         }
