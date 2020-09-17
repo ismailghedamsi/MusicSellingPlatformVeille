@@ -5,7 +5,7 @@
 
     <link href="css/FormStyling.css" rel="stylesheet" />
     <div class="register-box">
-        <EditForm Model="@fan" OnValidSubmit="@Authenticate">
+        <EditForm Model="@fan" OnValidSubmit="@Registration">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="user-box">
@@ -57,10 +57,9 @@
         List<Artist> artists = new List<Artist>();
         Artist oneArtist = new Artist();
         bool loginError = false;
-        public async Task Authenticate()
+        public async Task Registration()
         {
-            //Artist artist = new Artist("tech nina",DateTime.Now, "desc");
-            //await Http.PostAsJsonAsync<Artist>("api/Artists", artist);
+            await httpClient.PostAsJsonAsync<Fan>("api/Fans", fan);
             //Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(artist));
             //NavigationManager.NavigateTo("login");
         }
