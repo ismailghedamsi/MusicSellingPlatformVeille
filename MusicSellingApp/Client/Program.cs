@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MusicSellingApp.Client.Repositories;
 using Blazored.LocalStorage;
+using BlazorStrap;
 
 namespace MusicSellingApp.Client
 {
@@ -27,7 +28,7 @@ namespace MusicSellingApp.Client
 
             builder.Services.AddTransient<IUserRepository, UserRepository>();
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-
+            builder.Services.AddBootstrapCss();
             await builder.Build().RunAsync();
         }
 
