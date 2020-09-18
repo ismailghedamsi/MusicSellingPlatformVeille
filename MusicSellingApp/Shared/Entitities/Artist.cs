@@ -46,8 +46,10 @@ namespace MusicSellingApp.Shared.Entitities
 
         public Artist()
         {
-        
 
+            Discography = new List<Album>() {
+                new Album("test",DateTime.Now,Genre.Blues,"aaa",10.5,"desc")
+            };
         }
 
         public Artist(string name, DateTime? careerBeginDate, string description)  
@@ -55,7 +57,6 @@ namespace MusicSellingApp.Shared.Entitities
           
             CareerBeginDate = careerBeginDate;
             Description = description;
-            //Discography = discography;
             Name = name;
 
         }
