@@ -5,9 +5,9 @@ using System.Text;
 
 namespace MusicSellingApp.Shared.Entitities
 {
-    public class Fan 
+    public class Fan : User
     {
-        public long Id { get; set; }
+
         [Required]
         [MinLength(2)]
         [MaxLength(30)]
