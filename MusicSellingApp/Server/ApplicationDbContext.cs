@@ -45,7 +45,7 @@ namespace MusicSellingApp.Server
             //modelBuilder.Entity<MoviesGenres>().HasKey(x => new { x.MovieId, x.GenreId });
 
 
-            modelBuilder.Entity<Album>()
+           modelBuilder.Entity<Album>()
             .HasOne(a => a.Artist)
             .WithMany(b => b.Discography);
 

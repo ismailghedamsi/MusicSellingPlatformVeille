@@ -33,7 +33,17 @@ namespace MusicSellingApp.Server
                 services.AddSingleton<HttpClient>();
             }*/
 
-                services.AddScoped<MusicSellingApp.Shared.CustomHttpClient>();
+            services.AddControllers().AddNewtonsoftJson();
+
+            services
+    .AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling =
+            Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    });
+
+            services.AddScoped<MusicSellingApp.Shared.CustomHttpClient>();
             services.AddAutoMapper(typeof(Startup));
 
 
