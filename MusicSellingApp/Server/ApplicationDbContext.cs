@@ -44,6 +44,13 @@ namespace MusicSellingApp.Server
             // modelBuilder.Entity<MoviesActors>().HasKey(x => new { x.MovieId, x.PersonId });
             //modelBuilder.Entity<MoviesGenres>().HasKey(x => new { x.MovieId, x.GenreId });
 
+
+            modelBuilder.Entity<Album>()
+            .HasOne(a => a.Artist)
+            .WithMany(b => b.Discography);
+
+
+
             modelBuilder.Entity<Artist>()
        .HasIndex(u => u.Username)
        .IsUnique();

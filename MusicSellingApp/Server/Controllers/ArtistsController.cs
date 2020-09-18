@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ namespace MusicSellingApp.Server.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+ 
+
         public ArtistsController(ApplicationDbContext context)
         {
             _context = context;
@@ -27,15 +30,6 @@ namespace MusicSellingApp.Server.Controllers
         {
             return await _context.Artists.ToListAsync();
         }
-
-        [HttpGet("{username}")]
-        public async Task<Artist> GetArtistByUsername(string username)
-        {
-            var artist = _context.Artists.Where(artist => artist.Username == username);
-            
-            return  await artist.FirstAsync();
-        }
-
 
         // GET: api/Artists/5
         [HttpGet("{id}")]

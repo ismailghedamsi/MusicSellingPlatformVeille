@@ -34,7 +34,7 @@ namespace MusicSellingApp.Shared.Entitities
         public string Email { get; set; }
 
 
-        //public List<Album> Discography { get; set; }
+        public ICollection<Album> Discography { get; set; }
 
 
         public override string ToString()
@@ -42,8 +42,11 @@ namespace MusicSellingApp.Shared.Entitities
             return Name + "\n" + CareerBeginDate.ToString() + "\n" + Description;
         }
 
+    
+
         public Artist()
         {
+        
 
         }
 

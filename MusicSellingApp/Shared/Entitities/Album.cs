@@ -5,6 +5,8 @@ namespace MusicSellingApp.Shared.Entitities
 {
     public class Album
     {
+        public int ArtistId { get; set; }
+        public Artist Artist { get; set; }
         public long Id { get; set; }
         public string AlbumName { get; set; }
         public DateTime ReleaseDate { get; set; }
@@ -17,6 +19,18 @@ namespace MusicSellingApp.Shared.Entitities
 
         public string Description { get; set; }
 
-        public TrackList TrackList { get; set; }
+        public Album()
+        {
+
+        }
+        public Album(string albumName, DateTime releaseDate, Genre genre, string cover, double price, string description)
+        {
+            AlbumName = albumName;
+            ReleaseDate = releaseDate;
+            Genre = genre;
+            Cover = cover;
+            Price = price;
+            Description = description;
+        }
     }
 }

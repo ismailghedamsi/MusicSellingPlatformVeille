@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using static System.Net.WebRequestMethods;
 using MusicSellingApp.Shared;
+using AutoMapper;
 
 namespace MusicSellingApp.Server
 {
@@ -33,9 +34,9 @@ namespace MusicSellingApp.Server
             }*/
 
                 services.AddScoped<MusicSellingApp.Shared.CustomHttpClient>();
-           
+            services.AddAutoMapper(typeof(Startup));
 
-             
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
