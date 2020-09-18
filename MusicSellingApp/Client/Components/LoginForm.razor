@@ -1,7 +1,7 @@
 ﻿@using System.Net.Http
 @inject HttpClient httpClient
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
-@inject ILocalStorageService storageService;
+@inject ILocalStorageService storageService
 <h3>RegistrationForm</h3>
 
 
@@ -29,13 +29,12 @@
 @code {
     Credential credential = new Credential();
     List<Artist> artists = new List<Artist>();
-    Artist oneArtist = new Artist();
     bool loginError = false;
     public async Task Authenticate()
     {
 
-        //Artist artist = new Artist("tech nina",DateTime.Now, "desc");
         artists = await httpClient.GetFromJsonAsync<List<Artist>>("api/Artists");
+        Artist artist = artists.Where(artist => artist.Username == credential.username && artist.Password == credential.password).First();
         if (artists.Where(artist => artist.Username == credential.username && artist.Password == credential.password).Count() != 0 )
         {
             await storageService.SetItemAsync<Artist>("Artist", artists.Where(artist => artist.Username == credential.username && artist.Password == credential.password).First());
