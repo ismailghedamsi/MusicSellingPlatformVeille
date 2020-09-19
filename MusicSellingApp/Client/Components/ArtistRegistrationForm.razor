@@ -6,77 +6,81 @@
 @using System.Text.Json
 @using System.Net.Http
 @inject HttpClient Http
-    <link href="css/FormStyling.css" rel="stylesheet" />
+@inject IJSRuntime JSRuntime
+<link href="css/FormStyling.css" rel="stylesheet" />
 
 
-    <h3>RegistrationForm</h3>
+<h3>RegistrationForm</h3>
 
 
-    <div class="register-box">
-        <EditForm Model="@artist" OnValidSubmit="@Validate">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+<div class="register-box">
+    <EditForm Model="@artist" OnValidSubmit="@Validate">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-            <div class="user-box">
-                <label>Age: </label>
-                <InputNumber class="form-control" @bind-Value="artist.Age" />
-            </div>
+        <div class="user-box">
+            <label>Age: </label>
+            <InputNumber class="form-control" @bind-Value="artist.Age" />
+        </div>
 
-            <div class="user-box">
-                <label>Artist Name : </label>
-                <InputText class="form-control" @bind-Value="artist.Name" />
-            </div>
+        <div class="user-box">
+            <label>Artist Name : </label>
+            <InputText class="form-control" @bind-Value="artist.Name" />
+        </div>
 
-            <div class="user-box">
-                <label>Biography : </label>
-                <InputTextArea class="form-control" @bind-Value="artist.Description" />
-            </div>
+        <div class="user-box">
+            <label>Biography : </label>
+            <InputTextArea class="form-control" @bind-Value="artist.Description" />
+        </div>
 
-            <div class="user-box">
-                <label>Career Begin Date : </label>
-                <InputDate class="form-control" @bind-Value="artist.CareerBeginDate" />
-            </div>
+        <div class="user-box">
+            <label>Career Begin Date : </label>
+            <InputDate class="form-control" @bind-Value="artist.CareerBeginDate" />
+        </div>
 
-            <div class="user-box">
-                <label>Username : </label>
-                <InputText @bind-Value="artist.Username" />
-            </div>
+        <div class="user-box">
+            <label>Username : </label>
+            <InputText @bind-Value="artist.Username" />
+        </div>
 
-            <div class="user-box">
-                <label>Password : </label>
-                <InputText type="password" class="form-control" @bind-Value="artist.Password" />
-            </div>
+        <div class="user-box">
+            <label>Password : </label>
+            <InputText type="password" class="form-control" @bind-Value="artist.Password" />
+        </div>
 
-            <div class="user-box">
-                <label>Email: </label>
-                <InputText @bind-Value="artist.Email" />
-            </div>
+        <div class="user-box">
+            <label>Email: </label>
+            <InputText @bind-Value="artist.Email" />
+        </div>
 
-            <div class="col text-center">
-                <button type="submit" class="btn btn-primary">Register </button>
-            </div>
-            @if (isSuccess)
-            {
-                <RegistrationSuccessModal/>
-            }
-
-        </EditForm>
-    </div>
-
-
-    @code {
-
-
-        Artist artist = new Artist();
-        bool isSuccess = false;
-
-        public async Task Validate()
+        <div class="col text-center">
+            <button type="submit" class="btn btn-primary">Register </button>
+        </div>
+        @if (isSuccess)
         {
-
-            //Artist artist = new Artist("tech nina",DateTime.Now, "desc");
-            await Http.PostAsJsonAsync<Artist>("api/Users/Artists", artist).ContinueWith((antecedent) => isSuccess = true);
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(artist));
-            //NavigationManager.NavigateTo("login");
+            <RegistrationSuccessModal />
         }
+
+    </EditForm>
+</div>
+
+
+@code {
+
+
+    Artist artist = new Artist();
+    bool isSuccess = false;
+
+    public async Task Validate()
+    {
+
+        //Artist artist = new Artist("tech nina",DateTime.Now, "desc");
+        await Http.PostAsJsonAsync<Artist>("api/Users/Artists", artist).ContinueWith(async (antecedent) => {
+            isSuccess = true;
+            await JSRuntime.InvokeVoidAsync("alert", "You can succesfully registered");
+        });
+        Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(artist));
+        //NavigationManager.NavigateTo("login");
     }
+}
 
