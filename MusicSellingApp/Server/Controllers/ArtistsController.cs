@@ -25,7 +25,6 @@ namespace MusicSellingApp.Server.Controllers
         }
 
         // GET: api/Artists
-        [HttpGet]
         public async Task<ActionResult<IEnumerable<Artist>>> GetArtists()
         {
             return await _context.Artists.ToListAsync();
@@ -49,6 +48,7 @@ namespace MusicSellingApp.Server.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
+   
         public async Task<IActionResult> PutArtist(long id, Artist artist)
         {
             if (id != artist.Id)

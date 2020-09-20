@@ -74,13 +74,11 @@
     public async Task Validate()
     {
 
-        //Artist artist = new Artist("tech nina",DateTime.Now, "desc");
         await Http.PostAsJsonAsync<Artist>("api/Users/Artists", artist).ContinueWith(async (antecedent) => {
             isSuccess = true;
             await JSRuntime.InvokeVoidAsync("alert", "You can succesfully registered");
         });
         Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(artist));
-        //NavigationManager.NavigateTo("login");
     }
 }
 

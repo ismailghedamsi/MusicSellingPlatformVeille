@@ -2,20 +2,23 @@
 
 @using System.Net.Http
 @inject HttpClient Http
+@inject ILocalStorageService storageService
 
 
+<h1>@todoItems.Length</h1>
+<button @onclick="click">Click</button>
+<span class="text-danger" >Welcome @user.Name please add album to your discography</span>
+@code {
+    public TodoItem[] todoItems = new TodoItem[5];
 
-    <h1>@todoItems.Length</h1>
-    <button @onclick="click">Click</button>
-    @code {
-        public TodoItem[] todoItems = new TodoItem[5];
+    Artist user = new Artist();
+    protected override async Task OnInitializedAsync() =>
+        todoItems = await Http.GetFromJsonAsync<TodoItem[]>("api/TodoItems");
 
-        protected override async Task OnInitializedAsync() =>
-            todoItems = await Http.GetFromJsonAsync<TodoItem[]>("api/TodoItems");
+    public async Task click()
+    {
+        await Http.PostAsJsonAsync<TodoItem>("api/TodoItems", new TodoItem() { Name = "Another todo item" });
+        user = await storageService.GetItemAsync<Artist>("Artist");
 
-        public async Task click()
-        {
-            await Http.PostAsJsonAsync<TodoItem>("api/TodoItems", new TodoItem() { Name = "Another todo item" });
-         
-        }
     }
+}

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MusicSellingApp.Client.Repositories;
 using Blazored.LocalStorage;
 using BlazorStrap;
 
@@ -16,7 +15,7 @@ namespace MusicSellingApp.Client
     public class Program
     {
         public static async Task Main(string[] args)
-        {
+        {  
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.Services.AddBlazoredLocalStorage();
             builder.RootComponents.Add<App>("app");
@@ -26,7 +25,7 @@ namespace MusicSellingApp.Client
                  BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
              });
 
-            builder.Services.AddTransient<IUserRepository, UserRepository>();
+   
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddBootstrapCss();
             await builder.Build().RunAsync();
