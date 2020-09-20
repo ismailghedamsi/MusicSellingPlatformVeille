@@ -1,5 +1,7 @@
-﻿<h3>ArtistsAlbums</h3>
+﻿@inject HttpClient client
+<h3>ArtistsAlbums</h3>
 
+<AddAlbumComponent/>
 
 <div class="mat-layout-grid">
   
@@ -9,15 +11,15 @@
             <div class="mat-layout-grid-cell">
                 <BSCard CardType="CardType.Card">
 
-                    <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="https://f4.bcbits.com/img/a0836156831_10.jpg" alt="Card image cap" />
+                    <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="@album.Cover" alt="Card image cap" />
 
                     <BSCard CardType="CardType.Body">
 
-                        <BSCard CardType="CardType.Title">Marlowe 2</BSCard>
+                        <BSCard CardType="CardType.Title">@album.AlbumName</BSCard>
 
-                        <BSCard CardType="CardType.Subtitle">Mello Music</BSCard>
+                        <BSCard CardType="CardType.Subtitle">@album.Genre</BSCard>
 
-                        <BSCard CardType="CardType.Text">This is the album description</BSCard>
+                        <BSCard CardType="CardType.Text">@album.Description</BSCard>
 
                         <BSButton>Delete</BSButton>
 
@@ -34,6 +36,8 @@
 
 
 @code {
+
+
 
     List<Album> albums = new List<Album>()
 {
