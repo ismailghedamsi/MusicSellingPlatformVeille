@@ -4,38 +4,38 @@
 @inject ILocalStorageService storageService;
 
     <link href="css/FormStyling.css" rel="stylesheet" />
-    <div class="register-box">
+    <div class="container">
         <EditForm Model="@fan" OnValidSubmit="@Registration">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="user-box">
                 <label>Firstname  : </label>
-                <InputText @bind-Value="fan.FirstName" />
+                <InputText  class="form-control inputstl"  @bind-Value="fan.FirstName" />
             </div>
 
             <div class="user-box">
                 <label>Lastname  : </label>
-                <InputText @bind-Value="fan.LastName" />
+                <InputText  class="form-control inputstl"   @bind-Value="fan.LastName" />
             </div>
 
             <div class="user-box">
                 <label>Age  : </label>
-                <InputNumber @bind-Value="fan.Age" />
+                <InputNumber  class="form-control inputstl"  @bind-Value="fan.Age" />
             </div>
 
             <div class="user-box">
                 <label>Email  : </label>
-                <InputText @bind-Value="fan.Email" />
+                <InputText  class="form-control inputstl"  @bind-Value="fan.Email" />
             </div>
 
             <div class="user-box">
                 <label>Username  : </label>
-                <InputText @bind-Value="fan.Username" />
+                <InputText  class="form-control inputstl"  @bind-Value="fan.Username" />
             </div>
 
             <div class="user-box">
                 <label>Password  : </label>
-                <InputText type="password" @bind-Value="fan.Password" />
+                <InputText  class="form-control inputstl"  type="password" @bind-Value="fan.Password" />
             </div>
 
 

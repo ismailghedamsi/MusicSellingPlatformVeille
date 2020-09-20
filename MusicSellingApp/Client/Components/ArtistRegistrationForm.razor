@@ -13,44 +13,44 @@
 <h3>RegistrationForm</h3>
 
 
-<div class="register-box">
+<div class="container">
     <EditForm Model="@artist" OnValidSubmit="@Validate">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
         <div class="user-box">
             <label>Age: </label>
-            <InputNumber class="form-control" @bind-Value="artist.Age" />
+            <InputNumber  class="form-control inputstl" @bind-Value="artist.Age" />
         </div>
 
         <div class="user-box">
             <label>Artist Name : </label>
-            <InputText class="form-control" @bind-Value="artist.Name" />
+            <InputText  class="form-control inputstl" @bind-Value="artist.Name" />
         </div>
 
         <div class="user-box">
             <label>Biography : </label>
-            <InputTextArea class="form-control" @bind-Value="artist.Description" />
+            <InputTextArea class="form-control inputstl"  @bind-Value="artist.Description" />
         </div>
 
         <div class="user-box">
             <label>Career Begin Date : </label>
-            <InputDate class="form-control" @bind-Value="artist.CareerBeginDate" />
+            <InputDate class="form-control inputstl" @bind-Value="artist.CareerBeginDate" />
         </div>
 
         <div class="user-box">
             <label>Username : </label>
-            <InputText @bind-Value="artist.Username" />
+            <InputText class="form-control inputstl" @bind-Value="artist.Username" />
         </div>
 
         <div class="user-box">
             <label>Password : </label>
-            <InputText type="password" class="form-control" @bind-Value="artist.Password" />
+            <InputText  type="password" class="form-control inputstl" @bind-Value="artist.Password" />
         </div>
 
         <div class="user-box">
             <label>Email: </label>
-            <InputText @bind-Value="artist.Email" />
+            <InputText class="form-control inputstl" @bind-Value="artist.Email" />
         </div>
 
         <div class="col text-center">
