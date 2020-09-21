@@ -49,28 +49,16 @@ namespace MusicSellingApp.Server.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
    
-        public async Task<IActionResult> PutArtist(long id, Artist artist)
+        public async Task<IActionResult> PutArtist(long id, Album album)
         {
-            if (id != artist.Id)
-            {
-                return BadRequest();
-            }
-
-
-
-            foreach (var album in artist.Discography)
-            {
-                _context.Attach(album);
-                _context.Entry(album).State = EntityState.Modified;
-                _context.SaveChanges();
-                _context.Entry(album).State = EntityState.Detached;
-            }
-
+           
             try
             {
-                await _context.SingleUpdateAsync(artist);
+  
+                var author = new Artist { Id = id };
+                _context.Attach(author);
+                author.Discography.Add(album);
                 await _context.SaveChangesAsync();
-                _context.Entry(artist).State = EntityState.Detached;
             }
             catch (DbUpdateConcurrencyException)
             {

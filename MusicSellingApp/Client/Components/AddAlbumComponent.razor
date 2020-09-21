@@ -67,7 +67,7 @@
         artist.Discography.Add(album);
         Console.WriteLine(artist.Id);
         Console.WriteLine($"api/Artists/{artist.Id}");
-        await httpClient.PutAsJsonAsync<Artist>($"/api/Artists/{artist.Id}", artist);
+        await httpClient.PutAsJsonAsync<Album>($"/api/Artists/{artist.Id}", album);
         //await httpClient.DeleteAsync($"https://localhost:44368/api/Artists/{artist.Id}");
         //artist = await httpClient.GetFromJsonAsync<Artist>($"api/Artists/{artist.Id}");
         //artist.Name = "another name";

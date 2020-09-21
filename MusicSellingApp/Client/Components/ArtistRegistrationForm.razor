@@ -74,7 +74,7 @@
     public async Task Validate()
     {
 
-        await Http.PostAsJsonAsync<Artist>("api/Users/Artists", artist).ContinueWith(async (antecedent) => {
+        await Http.PostAsJsonAsync<Artist>("api/Artists", artist).ContinueWith(async (antecedent) => {
             isSuccess = true;
             await JSRuntime.InvokeVoidAsync("alert", "You can succesfully registered");
         });
