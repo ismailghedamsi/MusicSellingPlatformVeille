@@ -2,31 +2,65 @@
 
 namespace MusicSellingApp.Server.Migrations
 {
-    public partial class onetomanyartistalbums : Migration
+    public partial class removeRepeatedArtistId : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Albums_TrackLists_TrackListId",
+                name: "FK_Albums_Users_ArtistId1",
                 table: "Albums");
 
             migrationBuilder.DropIndex(
-                name: "IX_Albums_TrackListId",
+                name: "IX_Albums_ArtistId1",
                 table: "Albums");
 
             migrationBuilder.DropColumn(
-                name: "TrackListId",
+                name: "ArtistId1",
                 table: "Albums");
 
-            migrationBuilder.AddColumn<int>(
+            migrationBuilder.AlterColumn<long>(
                 name: "ArtistId",
                 table: "Albums",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Albums_ArtistId",
+                table: "Albums",
+                column: "ArtistId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Albums_Users_ArtistId",
+                table: "Albums",
+                column: "ArtistId",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Albums_Users_ArtistId",
+                table: "Albums");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Albums_ArtistId",
+                table: "Albums");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "ArtistId",
+                table: "Albums",
+                type: "int",
                 nullable: false,
-                defaultValue: 0);
+                oldClrType: typeof(long),
+                oldNullable: true);
 
             migrationBuilder.AddColumn<long>(
                 name: "ArtistId1",
                 table: "Albums",
+                type: "bigint",
                 nullable: true);
 
             migrationBuilder.CreateIndex(
@@ -35,48 +69,10 @@ namespace MusicSellingApp.Server.Migrations
                 column: "ArtistId1");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Albums_Artists_ArtistId1",
+                name: "FK_Albums_Users_ArtistId1",
                 table: "Albums",
                 column: "ArtistId1",
-                principalTable: "Artists",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-        }
-
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Albums_Artists_ArtistId1",
-                table: "Albums");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Albums_ArtistId1",
-                table: "Albums");
-
-            migrationBuilder.DropColumn(
-                name: "ArtistId",
-                table: "Albums");
-
-            migrationBuilder.DropColumn(
-                name: "ArtistId1",
-                table: "Albums");
-
-            migrationBuilder.AddColumn<int>(
-                name: "TrackListId",
-                table: "Albums",
-                type: "int",
-                nullable: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Albums_TrackListId",
-                table: "Albums",
-                column: "TrackListId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Albums_TrackLists_TrackListId",
-                table: "Albums",
-                column: "TrackListId",
-                principalTable: "TrackLists",
+                principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
         }

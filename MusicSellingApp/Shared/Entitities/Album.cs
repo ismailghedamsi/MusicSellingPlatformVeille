@@ -5,7 +5,6 @@ namespace MusicSellingApp.Shared.Entitities
 {
     public class Album
     {
-        public int ArtistId { get; set; }
         public Artist Artist { get; set; }
         public long Id { get; set; }
         public string AlbumName { get; set; }

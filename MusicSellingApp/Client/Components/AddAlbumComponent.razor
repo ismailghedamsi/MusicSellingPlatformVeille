@@ -1,64 +1,79 @@
-﻿
+﻿@inject ILocalStorageService storageService
+@inject HttpClient httpClient
+@using System.Text.Json
+<div class="container">
 
-    <div class="container">
-
-        <EditForm Model="@album" OnValidSubmit="@AddAlbum">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-
-            <div  class="form-group">
-                <label>Artist Name </label>
-                <InputText class="form-control inputstl" @bind-Value="artistName" />
-            </div>
-
-            <div  class="form-group">
-                <label>Album Name  : </label>
-                <InputText class="form-control inputstl" @bind-Value="album.AlbumName" />
-            </div>
-
-            <div  class="form-group">
-                <InputSelect  class="form-control inputstl" @bind-Value="album.Genre">
-                    @foreach (var genre in Enum.GetValues(typeof(Genre)))
-                    {
-                        <option value="@genre">@genre</option>
-                    }
-                </InputSelect>
-            </div>
-
-            <div  class="form-group">
-                <label>Description  : </label>
-                <InputText class="form-control inputstl" @bind-Value="album.Description" />
-            </div>
-
-            <div  class="form-group">
-                <label>Price  : </label>
-                <InputNumber class="form-control inputstl"  @bind-Value="album.Price" />
-            </div>
-
-            <div  class="form-group">
-                <label>Release Date  : </label>
-                <InputDate class="form-control inputstl"  @bind-Value="album.ReleaseDate" />
-            </div>
-
-
-            <div  class="form-group">
-                <button class="btn btn-primary" type="submit">Add Album </button>
-            </div>
-        </EditForm>
-    </div>
+    <EditForm Model="@album" OnValidSubmit="@AddAlbum">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
 
 
+        <div class="form-group">
+            <label>Artist Name </label>
+            <InputText class="form-control inputstl" @bind-Value="artistName" />
+        </div>
+
+   
+
+        <div class="form-group">
+            <label>Album Name  : </label>
+            <InputText class="form-control inputstl" @bind-Value="album.AlbumName" />
+        </div>
+
+        <div class="form-group">
+            <InputSelect class="form-control inputstl" @bind-Value="album.Genre">
+                @foreach (var genre in Enum.GetValues(typeof(Genre)))
+                {
+                    <option value="@genre">@genre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label>Description  : </label>
+            <InputText class="form-control inputstl" @bind-Value="album.Description" />
+        </div>
+
+        <div class="form-group">
+            <label>Price  : </label>
+            <InputNumber class="form-control inputstl" @bind-Value="album.Price" />
+        </div>
+
+        <div class="form-group">
+            <label>Release Date  : </label>
+            <InputDate class="form-control inputstl" @bind-Value="album.ReleaseDate" />
+        </div>
 
 
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Add Album </button>
+        </div>
+    </EditForm>
+</div>
 
 
-@code {
-    Album album = new Album();
-
-    string artistName = "";
-    public void AddAlbum()
+@code { 
+    protected override async Task OnInitializedAsync()
     {
+        artist = await storageService.GetItemAsync<Artist>("Artist");
+    }
+    Album album = new Album();
+    Artist artist = new Artist();
+    string artistName = "";
+    public async Task AddAlbum()
+    {
+        artist.Name = "Another name";
+        artist.Discography.Add(album);
+        Console.WriteLine(artist.Id);
+        Console.WriteLine($"api/Artists/{artist.Id}");
+        await httpClient.PutAsJsonAsync<Artist>($"/api/Artists/{artist.Id}", artist);
+        //await httpClient.DeleteAsync($"https://localhost:44368/api/Artists/{artist.Id}");
+        //artist = await httpClient.GetFromJsonAsync<Artist>($"api/Artists/{artist.Id}");
+        //artist.Name = "another name";
+        //await httpClient.DeleteAsync($"https://localhost:44368/api/Artists/{artist.Id}");
+        //await httpClient.PostAsJsonAsync<Artist>("api/Artists", artist);
+
 
     }
 }

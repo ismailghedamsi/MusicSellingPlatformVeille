@@ -15,6 +15,7 @@ namespace MusicSellingApp.Server.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
+     
         private readonly ApplicationDbContext _context;
 
         public UsersController(ApplicationDbContext context)
@@ -49,6 +50,44 @@ namespace MusicSellingApp.Server.Controllers
 
             return user;
         }
+
+
+        [HttpPost("Artists/{id}")]
+        public async Task<IActionResult> PutUser(long id, Artist user)
+        {
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(user).State = EntityState.Modified;
+            foreach(var album in user.Discography)
+            {
+                _context.Attach(album);
+                _context.Entry(album).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
+         
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
 
         // PUT: api/Users/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

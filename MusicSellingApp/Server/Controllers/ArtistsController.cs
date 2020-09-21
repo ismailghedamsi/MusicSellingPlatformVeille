@@ -56,11 +56,21 @@ namespace MusicSellingApp.Server.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(artist).State = EntityState.Modified;
+
+
+            foreach (var album in artist.Discography)
+            {
+                _context.Attach(album);
+                _context.Entry(album).State = EntityState.Modified;
+                _context.SaveChanges();
+                _context.Entry(album).State = EntityState.Detached;
+            }
 
             try
             {
+                await _context.SingleUpdateAsync(artist);
                 await _context.SaveChangesAsync();
+                _context.Entry(artist).State = EntityState.Detached;
             }
             catch (DbUpdateConcurrencyException)
             {

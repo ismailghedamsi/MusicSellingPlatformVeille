@@ -10,8 +10,8 @@ using MusicSellingApp.Server;
 namespace MusicSellingApp.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200918164836_AddInheritance")]
-    partial class AddInheritance
+    [Migration("20200921144426_addDtabaseGeneratedannotation")]
+    partial class addDtabaseGeneratedannotation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,24 @@ namespace MusicSellingApp.Server.Migrations
                 .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Admin", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admins");
+                });
 
             modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Album", b =>
                 {
@@ -31,10 +49,7 @@ namespace MusicSellingApp.Server.Migrations
                     b.Property<string>("AlbumName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ArtistId")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("ArtistId1")
+                    b.Property<long?>("ArtistId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Cover")
@@ -58,7 +73,7 @@ namespace MusicSellingApp.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ArtistId1");
+                    b.HasIndex("ArtistId");
 
                     b.HasIndex("FanId");
 
@@ -147,19 +162,6 @@ namespace MusicSellingApp.Server.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("User");
                 });
 
-            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Admin", b =>
-                {
-                    b.HasBaseType("MusicSellingApp.Shared.Entitities.User");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("Admin");
-                });
-
             modelBuilder.Entity("MusicSellingApp.Shared.Entitities.Artist", b =>
                 {
                     b.HasBaseType("MusicSellingApp.Shared.Entitities.User");
@@ -218,13 +220,11 @@ namespace MusicSellingApp.Server.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnName("Fan_FirstName")
                         .HasColumnType("nvarchar(30)")
                         .HasMaxLength(30);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnName("Fan_LastName")
                         .HasColumnType("nvarchar(30)")
                         .HasMaxLength(30);
 
@@ -247,7 +247,7 @@ namespace MusicSellingApp.Server.Migrations
                 {
                     b.HasOne("MusicSellingApp.Shared.Entitities.Artist", "Artist")
                         .WithMany("Discography")
-                        .HasForeignKey("ArtistId1");
+                        .HasForeignKey("ArtistId");
 
                     b.HasOne("MusicSellingApp.Shared.Entitities.Fan", null)
                         .WithMany("Library")

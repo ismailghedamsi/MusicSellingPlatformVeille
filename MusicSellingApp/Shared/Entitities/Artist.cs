@@ -46,10 +46,7 @@ namespace MusicSellingApp.Shared.Entitities
 
         public Artist()
         {
-
-            Discography = new List<Album>() {
-                new Album("test",DateTime.Now,Genre.Blues,"aaa",10.5,"desc")
-            };
+            Discography = new List<Album>();
         }
 
         public Artist(string name, DateTime? careerBeginDate, string description)  
