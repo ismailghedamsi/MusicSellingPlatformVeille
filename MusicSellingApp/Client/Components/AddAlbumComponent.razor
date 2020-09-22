@@ -1,5 +1,6 @@
 ﻿@inject ILocalStorageService storageService
 @inject HttpClient httpClient
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 @using System.Text.Json
 <div class="container">
 
@@ -59,7 +60,7 @@
 </div>
 
 
-@code { 
+@code {
     protected override async Task OnInitializedAsync()
     {
         artist = await storageService.GetItemAsync<Artist>("loggedUser");
@@ -69,11 +70,14 @@
     string artistName = "";
     public async Task AddAlbum()
     {
-        artist.Discography.Add(album);
-        Console.WriteLine(artist.Id);
-        Console.WriteLine($"api/Artists/{artist.Id}");
-        await httpClient.PutAsJsonAsync<Album>($"/api/Artists/{artist.Id}", album);
-        this.StateHasChanged();
-
+        if(artist != null)
+        {
+            artist.Discography.Add(album);
+            Console.WriteLine(artist.Id);
+            Console.WriteLine($"api/Artists/{artist.Id}");
+            await httpClient.PutAsJsonAsync<Album>($"/api/Artists/{artist.Id}", album);
+            this.StateHasChanged();
+            NavigationManager.NavigateTo("ArtistAlbums", true);
+        }
     }
 }

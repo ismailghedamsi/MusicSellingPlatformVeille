@@ -7,28 +7,32 @@
 <div class="mat-layout-grid">
 
     <div class="mat-layout-grid-inner">
-        @foreach (var album in albums)
+        @if (albums != null && albums.Count != 0)
         {
-            <div class="mat-layout-grid-cell">
-                <BSCard CardType="CardType.Card">
+            @foreach (var album in albums)
+            {
+                <div class="mat-layout-grid-cell">
+                    <BSCard CardType="CardType.Card">
 
-                    <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="@album.Cover" alt="Card image cap" />
+                        <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="@album.Cover" alt="Card image cap" />
 
-                    <BSCard CardType="CardType.Body">
+                        <BSCard CardType="CardType.Body">
 
-                        <BSCard CardType="CardType.Title">@album.AlbumName</BSCard>
+                            <BSCard CardType="CardType.Title">@album.AlbumName</BSCard>
 
-                        <BSCard CardType="CardType.Subtitle">@album.Genre</BSCard>
+                            <BSCard CardType="CardType.Subtitle">@album.Genre</BSCard>
 
-                        <BSCard CardType="CardType.Text">@album.Description</BSCard>
+                            <BSCard CardType="CardType.Text">@album.Description</BSCard>
 
-                        <BSButton>Delete</BSButton>
+                            <BSButton>Delete</BSButton>
+
+                        </BSCard>
 
                     </BSCard>
-
-                </BSCard>
-            </div>
+                </div>
+            }
         }
+
     </div>
 
 </div>
@@ -39,19 +43,22 @@
 @code { 
 
 
-
-    protected override async Task OnInitializedAsync()
-    {
-        artist = await storageService.GetItemAsync<Artist>("loggedUser");
-        artistId = artist.Id;
-        albums = await client.GetFromJsonAsync<List<Album>>($"api/Albums/{artistId}");
-        Console.WriteLine(albums.Count);
-    }
-
     Artist artist;
     long artistId;
     List<Album> albums = new List<Album>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        artist = await storageService.GetItemAsync<Artist>("loggedUser");
+        if(artist != null)
+        {
+
+            artistId = artist.Id;
+            albums = await client.GetFromJsonAsync<List<Album>>($"api/Albums/{artistId}");
+            Console.WriteLine(albums.Count);
+        }
+
+    }
 
     //    List<Album> albums = new List<Album>()
     //{

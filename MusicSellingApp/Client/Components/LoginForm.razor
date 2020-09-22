@@ -17,7 +17,7 @@
     </div>
 
     <div class="form-group">
-        <label>Genre : </label>
+        <label>User type : </label>
         <InputSelect class="form-control inputstl" @bind-Value="userType">
                 <option value="Artist">Artist</option>
                 <option value="Fan">Fan</option>
@@ -39,17 +39,30 @@
     string descriminator = "";
     bool loginError = false;
     string userType = "";
+    List<Artist> artists = new List<Artist>();
     public async Task Authenticate()
     {
+        await storageService.RemoveItemAsync("loggedUser");
 
-
-        if(userType == "Artist")
+        if (userType == "Artist")
         {
-            List<Artist> artists = await httpClient.GetFromJsonAsync<List<Artist>>("api/Artists");
-            Artist artist = artists.Where(artist => artist.Username == credential.username && artist.Password == credential.password).First();
-            Console.WriteLine(artist);
-            await storageService.SetItemAsync<User>("loggedUser", artist);
-            NavigationManager.NavigateTo("ArtistAlbums");
+            artists = await httpClient.GetFromJsonAsync<List<Artist>>("api/Artists");
+            if(artists != null)
+            {
+                var temp = artists.Where(artist => artist.Username == credential.username && artist.Password == credential.password);
+                Console.WriteLine(temp);
+                if (temp != null && temp.Count() != 0)
+                {
+                    Artist artist = artists.Where(artist => artist.Username == credential.username && artist.Password == credential.password).First();
+                    if (artist != null)
+                    {
+                        await storageService.SetItemAsync<Artist>("loggedUser", artist);
+                    }
+                }
+
+                NavigationManager.NavigateTo("ArtistAlbums");
+            }
+
         }
         else
         {
