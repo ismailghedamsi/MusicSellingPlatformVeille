@@ -14,7 +14,7 @@
             <InputText class="form-control inputstl" @bind-Value="artistName" />
         </div>
 
-   
+
 
         <div class="form-group">
             <label>Album Name  : </label>
@@ -22,6 +22,7 @@
         </div>
 
         <div class="form-group">
+            <label>Genre : </label>
             <InputSelect class="form-control inputstl" @bind-Value="album.Genre">
                 @foreach (var genre in Enum.GetValues(typeof(Genre)))
                 {
@@ -45,6 +46,11 @@
             <InputDate class="form-control inputstl" @bind-Value="album.ReleaseDate" />
         </div>
 
+        <div class="form-group">
+            <label>Album Cover Link  : </label>
+            <InputText class="form-control inputstl" @bind-Value="album.Cover" />
+        </div>
+
 
         <div class="form-group">
             <button class="btn btn-primary" type="submit">Add Album </button>
@@ -56,24 +62,18 @@
 @code { 
     protected override async Task OnInitializedAsync()
     {
-        artist = await storageService.GetItemAsync<Artist>("Artist");
+        artist = await storageService.GetItemAsync<Artist>("loggedUser");
     }
     Album album = new Album();
     Artist artist = new Artist();
     string artistName = "";
     public async Task AddAlbum()
     {
-        artist.Name = "Another name";
         artist.Discography.Add(album);
         Console.WriteLine(artist.Id);
         Console.WriteLine($"api/Artists/{artist.Id}");
         await httpClient.PutAsJsonAsync<Album>($"/api/Artists/{artist.Id}", album);
-        //await httpClient.DeleteAsync($"https://localhost:44368/api/Artists/{artist.Id}");
-        //artist = await httpClient.GetFromJsonAsync<Artist>($"api/Artists/{artist.Id}");
-        //artist.Name = "another name";
-        //await httpClient.DeleteAsync($"https://localhost:44368/api/Artists/{artist.Id}");
-        //await httpClient.PostAsJsonAsync<Artist>("api/Artists", artist);
-
+        this.StateHasChanged();
 
     }
 }
