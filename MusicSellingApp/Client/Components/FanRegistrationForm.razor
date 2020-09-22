@@ -59,7 +59,7 @@
         bool loginError = false;
         public async Task Registration()
         {
-            await httpClient.PostAsJsonAsync<Fan>("api/Users/Fans", fan);
+            await httpClient.PostAsJsonAsync<Fan>("api/Fans", fan);
             //Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(artist));
             //NavigationManager.NavigateTo("login");
         }
