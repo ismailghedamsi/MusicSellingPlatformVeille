@@ -12,6 +12,9 @@ using static System.Net.WebRequestMethods;
 using MusicSellingApp.Shared;
 using AutoMapper;
 using MusicSellingApp.Server.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 
 namespace MusicSellingApp.Server
 {
@@ -34,7 +37,12 @@ namespace MusicSellingApp.Server
                 services.AddSingleton<HttpClient>();
             }*/
 
-      
+
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                //options.SerializerSettings.Converters.Add(new UserJsonConverter());
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
             services.AddScoped<MusicSellingApp.Shared.CustomHttpClient>();
             services.AddAutoMapper(typeof(Startup));
             services.AddTransient<IUserRepository, UserRepository>();

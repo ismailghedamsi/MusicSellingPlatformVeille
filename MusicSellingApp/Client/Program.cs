@@ -19,6 +19,7 @@ namespace MusicSellingApp.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.Services.AddBlazoredLocalStorage();
             builder.RootComponents.Add<App>("app");
+           
             builder.Services.AddScoped(sp =>
              new HttpClient
              {
