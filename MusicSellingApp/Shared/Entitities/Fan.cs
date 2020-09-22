@@ -21,29 +21,14 @@ namespace MusicSellingApp.Shared.Entitities
         [Range(10, 120, ErrorMessage = "This website is restricted for 10 years old to 120 years old person")]
         public int Age { get; set; }
 
-
-        [Required]
-        [MinLength(2)]
-        [MaxLength(30)]
-        public string Username { get; set; }
-
-        [Required]
-        [MinLength(8)]
-        [MaxLength(30)]
-        public string Password { get; set; }
-
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-
         public override string ToString()
         {
             return FirstName + "\n" + LastName;
         }
 
-        public Fan()
+        public Fan() : base()
         {
+            Descriminator = "Fan";
             Library = new List<Album>();
         }
 

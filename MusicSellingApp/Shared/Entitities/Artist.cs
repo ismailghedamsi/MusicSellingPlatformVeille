@@ -22,16 +22,7 @@ namespace MusicSellingApp.Shared.Entitities
         [Required]
         public string Description { get; set; }
 
-
-        [Required]
-        public string Username { get; set; }
-
-        [Required]
-        public string Password { get; set; }
-
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+  
 
 
         public ICollection<Album> Discography { get; set; }
@@ -44,8 +35,9 @@ namespace MusicSellingApp.Shared.Entitities
 
     
 
-        public Artist()
+        public Artist() : base()
         {
+            Descriminator = "Artist";
             Discography = new List<Album>();
         }
 
