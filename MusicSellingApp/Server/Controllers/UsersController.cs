@@ -27,7 +27,12 @@ namespace MusicSellingApp.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            var fans = await _context.Fans.ToListAsync();
+            var artists = await _context.Artists.ToListAsync();
+            List<User> users = new List<User>();
+            users.AddRange(fans);
+            users.AddRange(artists);
+            return users;
         }
 
         [HttpGet("Artists")]
