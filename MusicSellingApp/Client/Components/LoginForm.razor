@@ -60,7 +60,7 @@
                     }
                 }
 
-                NavigationManager.NavigateTo("ArtistAlbums");
+                NavigationManager.NavigateTo("ArtistAlbums",true);
             }
 
         }
@@ -69,7 +69,7 @@
             List<Fan> fans = await httpClient.GetFromJsonAsync<List<Fan>>("api/Fans");
             Fan fan = fans.Where(artist => artist.Username == credential.username && artist.Password == credential.password).First();
             await storageService.SetItemAsync<Fan>("loggedUser", fan);
-            NavigationManager.NavigateTo("counter");
+            NavigationManager.NavigateTo("counter",true);
         }
 
     }
