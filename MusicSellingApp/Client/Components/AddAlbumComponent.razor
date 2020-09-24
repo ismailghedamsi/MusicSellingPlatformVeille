@@ -8,15 +8,6 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-
-
-        <div class="form-group">
-            <label>Artist Name </label>
-            <InputText class="form-control inputstl" @bind-Value="artistName" />
-        </div>
-
-
-
         <div class="form-group">
             <label>Album Name  : </label>
             <InputText class="form-control inputstl" @bind-Value="album.AlbumName" />
@@ -76,8 +67,8 @@
             Console.WriteLine(artist.Id);
             Console.WriteLine($"api/Artists/{artist.Id}");
             await httpClient.PutAsJsonAsync<Album>($"/api/Artists/{artist.Id}", album);
-            this.StateHasChanged();
-            NavigationManager.NavigateTo("ArtistAlbums", true);
+            StateHasChanged();
+            NavigationManager.NavigateTo("ArtistAlbums2");
         }
     }
 }
