@@ -56,10 +56,6 @@
         <div class="col text-center">
             <button type="submit" class="btn btn-primary">Register </button>
         </div>
-        @if (isSuccess)
-        {
-            <RegistrationSuccessModal />
-        }
 
     </EditForm>
 </div>
@@ -76,7 +72,7 @@
 
         await Http.PostAsJsonAsync<Artist>("api/Artists", artist).ContinueWith(async (antecedent) => {
             isSuccess = true;
-            await JSRuntime.InvokeVoidAsync("alert", "You can succesfully registered");
+            await JSRuntime.InvokeVoidAsync("alert", "You can succesfully log in");
         });
         Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(artist));
     }

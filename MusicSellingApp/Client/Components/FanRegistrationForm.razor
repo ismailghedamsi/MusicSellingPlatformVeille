@@ -2,69 +2,70 @@
 @inject HttpClient httpClient
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 @inject ILocalStorageService storageService
+@inject IJSRuntime JSRuntime
+<link href="css/FormStyling.css" rel="stylesheet" />
+<div class="container">
+    <EditForm Model="@fan" OnValidSubmit="@Registration">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="user-box">
+            <label>Firstname  : </label>
+            <InputText class="form-control inputstl" @bind-Value="fan.FirstName" />
+        </div>
 
-    <link href="css/FormStyling.css" rel="stylesheet" />
-    <div class="container">
-        <EditForm Model="@fan" OnValidSubmit="@Registration">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <div class="user-box">
-                <label>Firstname  : </label>
-                <InputText  class="form-control inputstl"  @bind-Value="fan.FirstName" />
-            </div>
+        <div class="user-box">
+            <label>Lastname  : </label>
+            <InputText class="form-control inputstl" @bind-Value="fan.LastName" />
+        </div>
 
-            <div class="user-box">
-                <label>Lastname  : </label>
-                <InputText  class="form-control inputstl"   @bind-Value="fan.LastName" />
-            </div>
+        <div class="user-box">
+            <label>Age  : </label>
+            <InputNumber class="form-control inputstl" @bind-Value="fan.Age" />
+        </div>
 
-            <div class="user-box">
-                <label>Age  : </label>
-                <InputNumber  class="form-control inputstl"  @bind-Value="fan.Age" />
-            </div>
+        <div class="user-box">
+            <label>Email  : </label>
+            <InputText class="form-control inputstl" @bind-Value="fan.Email" />
+        </div>
 
-            <div class="user-box">
-                <label>Email  : </label>
-                <InputText  class="form-control inputstl"  @bind-Value="fan.Email" />
-            </div>
+        <div class="user-box">
+            <label>Username  : </label>
+            <InputText class="form-control inputstl" @bind-Value="fan.Username" />
+        </div>
 
-            <div class="user-box">
-                <label>Username  : </label>
-                <InputText  class="form-control inputstl"  @bind-Value="fan.Username" />
-            </div>
-
-            <div class="user-box">
-                <label>Password  : </label>
-                <InputText  class="form-control inputstl"  type="password" @bind-Value="fan.Password" />
-            </div>
-
-
-            <div class="col text-center">
-                <button class="btn btn-primary" type="submit">Register </button>
-            </div>
+        <div class="user-box">
+            <label>Password  : </label>
+            <InputText class="form-control inputstl" type="password" @bind-Value="fan.Password" />
+        </div>
 
 
-
-
-        </EditForm>
-    </div>
+        <div class="col text-center">
+            <button class="btn btn-primary" type="submit">Register </button>
+        </div>
 
 
 
-    @code {
-        Fan fan = new Fan();
-        Credential credential = new Credential();
-        List<Artist> artists = new List<Artist>();
-        Artist oneArtist = new Artist();
-        bool loginError = false;
-        public async Task Registration()
+
+    </EditForm>
+</div>
+
+
+
+@code {
+    Fan fan = new Fan();
+    Credential credential = new Credential();
+    List<Artist> artists = new List<Artist>();
+    Artist oneArtist = new Artist();
+    bool loginError = false;
+    public async Task Registration()
+    {
+        await httpClient.PostAsJsonAsync<Fan>("api/Fans", fan).ContinueWith(async (antecedent) =>
         {
-            await httpClient.PostAsJsonAsync<Fan>("api/Fans", fan);
-            //Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(artist));
-            //NavigationManager.NavigateTo("login");
-        }
-
-
+            await JSRuntime.InvokeVoidAsync("alert", "You can succesfully sing in");
+        }); ;
     }
+
+
+}
 
 

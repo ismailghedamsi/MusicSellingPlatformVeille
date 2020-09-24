@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MusicSellingApp.Shared.Entitities
 {
@@ -9,7 +10,8 @@ namespace MusicSellingApp.Shared.Entitities
         public Artist Artist { get; set; }
         public long Id { get; set; }
         public string AlbumName { get; set; }
-        public DateTime ReleaseDate { get; set; }
+        [Required]
+        public DateTime? ReleaseDate { get; set; }
 
         public Genre Genre { get; set; }
 
