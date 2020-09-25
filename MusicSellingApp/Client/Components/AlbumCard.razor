@@ -1,0 +1,32 @@
+﻿
+    @if (Album != null)
+    {
+
+                <BSCard CardType="CardType.Card">
+
+                    <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="@Album.Cover" alt="Card image cap" />
+
+                    <BSCard CardType="CardType.Body">
+                        <BSCard CardType="CardType.Title">@Album.AlbumName</BSCard>
+                        <BSCard CardType="CardType.Title">@Album.AlbumName</BSCard>
+
+                        <BSCard CardType="CardType.Columns">@Album.Id</BSCard>
+                        <BSCard CardType="CardType.Subtitle">@Album.Genre</BSCard>
+
+                        <BSCard CardType="CardType.Text">@Album.Description</BSCard>
+
+                        <BSButton @onclick="() => OnDelete.InvokeAsync(Album.Id)">Delete</BSButton>
+                        <BSButton>Update</BSButton>
+
+                    </BSCard>
+
+                </BSCard>
+    
+    }
+
+
+@code {
+
+    [Parameter] public  Album Album { get; set; }
+    [Parameter] public EventCallback<long> OnDelete { get; set; }
+}
