@@ -86,6 +86,7 @@ namespace MusicSellingApp.Server.Controllers
         public async Task<ActionResult<Album>> DeleteAlbum(long id)
         {
             var album = await _context.Albums.FindAsync(id);
+            Console.WriteLine("is album null " + album == null);
             if (album == null)
             {
                 return NotFound();
@@ -95,6 +96,11 @@ namespace MusicSellingApp.Server.Controllers
             await _context.SaveChangesAsync();
 
             return album;
+            //var album = new Album { Id = id };
+            //_context.Albums.Attach(album);
+            //_context.Albums.Remove(album);
+            //await _context.SaveChangesAsync();
+            //return Ok();
         }
 
         private bool AlbumExists(long id)

@@ -1,84 +1,139 @@
 ﻿@inject HttpClient client
 @inject ILocalStorageService storageService
+
 <h3>ArtistsAlbums</h3>
 
-<AddAlbumComponent />
+<div class="container">
+
+    <EditForm Model="@Album" OnValidSubmit="@AddAlbum">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label>Album Name  : </label>
+            <InputText class="form-control inputstl" @bind-Value="Album.AlbumName" />
+        </div>
+
+        <div class="form-group">
+            <label>Genre : </label>
+            <InputSelect class="form-control inputstl" @bind-Value="Album.Genre">
+                @foreach (var genre in Enum.GetValues(typeof(Genre)))
+                {
+                    <option value="@genre">@genre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label>Description  : </label>
+            <InputTextArea class="form-control inputstl" @bind-Value="Album.Description" />
+        </div>
+
+        <div class="form-group">
+            <label>Price  : </label>
+            <InputNumber class="form-control inputstl" @bind-Value="Album.Price" />
+        </div>
+
+        <div class="form-group">
+            <label>Release Date  : </label>
+            <InputDate class="form-control inputstl" @bind-Value="Album.ReleaseDate" />
+        </div>
+
+        <div class="form-group">
+            <label>Album Cover Link  : </label>
+            <InputText class="form-control inputstl" @bind-Value="Album.Cover" />
+        </div>
+
+
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Add Album </button>
+        </div>
+    </EditForm>
+</div>
 
 <div class="mat-layout-grid">
-
     <div class="mat-layout-grid-inner">
-        @if (albums != null && albums.Count != 0)
+        @foreach (Album album in albums)
         {
-            @foreach (var album in albums)
-            {
-                <div class="mat-layout-grid-cell">
-                    <BSCard CardType="CardType.Card">
+            <div class="mat-layout-grid-cell">
+                <AlbumCard Album="@album" OnDelete="DeleteAlbum" />
+            </div>
 
-                        <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="@album.Cover" alt="Card image cap" />
-
-                        <BSCard CardType="CardType.Body">
-
-                            <BSCard CardType="CardType.Title">@album.AlbumName</BSCard>
-
-                            <BSCard CardType="CardType.Subtitle">@album.Genre</BSCard>
-
-                            <BSCard CardType="CardType.Text">@album.Description</BSCard>
-
-                            <BSButton>Delete</BSButton>
-
-                        </BSCard>
-
-                    </BSCard>
-                </div>
-            }
         }
-
-
+        </div>
     </div>
+
     @if (albums == null || albums.Count == 0)
     {
         <h1 style="color : yellow">You have  no albums please add albums</h1>
     }
-</div>
 
 
 
 
-@code { 
+
+    @code {
 
 
-    Artist artist;
-    long artistId;
-    List<Album> albums = new List<Album>();
+        Artist artist;
+        long artistId;
+        public List<Album> albums = new List<Album>();
 
-    protected override async Task OnInitializedAsync()
-    {
-        artist = await storageService.GetItemAsync<Artist>("loggedUser");
-        if(artist != null)
+        public Album Album { get; set; } = new Album();
+        string artistName = "";
+
+        protected override async Task OnInitializedAsync()
         {
+            artist = await storageService.GetItemAsync<Artist>("loggedUser");
+            if (artist != null)
+            {
 
-            artistId = artist.Id;
+                artistId = artist.Id;
+                albums = await client.GetFromJsonAsync<List<Album>>($"api/Albums/{artistId}");
+            }
+        }
+
+        public async Task AddAlbum()
+        {
+            if (artist != null)
+            {
+                artist.Discography.Add(Album);
+                await client.PutAsJsonAsync<Album>($"/api/Artists/{artist.Id}", Album);
+                StateHasChanged();
+                artist = await storageService.GetItemAsync<Artist>("loggedUser");
+                if (artist != null)
+                {
+
+                    artistId = artist.Id;
+                    albums = await client.GetFromJsonAsync<List<Album>>($"api/Albums/{artistId}");
+                }
+
+            }
+        }
+
+        public async Task DeleteAlbum(long id)
+        {
+            Console.WriteLine(id);
+            await client.DeleteAsync($"api/Albums/{id}");
             albums = await client.GetFromJsonAsync<List<Album>>($"api/Albums/{artistId}");
         }
 
+
     }
 
+    <style>
+        h3 {
+            color: yellow;
+        }
 
-}
-
-<style>
-    h3 {
-        color: yellow;
-    }
-
-    body {
-        background-color: yellow;
-    }
+        body {
+            background-color: yellow;
+        }
 
 
 
-    img {
-        width: 250px;
-        height: 250px;
-    }
-</style>
+        img {
+            width: 250px;
+            height: 250px;
+        }
+    </style>
