@@ -1,0 +1,75 @@
+﻿@inject ILocalStorageService storageService
+@inject HttpClient httpClient
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+@using System.Text.Json
+<div class="container">
+
+    <EditForm Model="@album" >
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label>Album Name  : </label>
+            <InputText class="form-control inputstl" @bind-Value="album.AlbumName" />
+        </div>
+
+        <div class="form-group">
+            <label>Genre : </label>
+            <InputSelect class="form-control inputstl" @bind-Value="album.Genre">
+                @foreach (var genre in Enum.GetValues(typeof(Genre)))
+                {
+                    <option value="@genre">@genre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label>Description  : </label>
+            <InputTextArea class="form-control inputstl" @bind-Value="album.Description" />
+        </div>
+
+        <div class="form-group">
+            <label>Price  : </label>
+            <InputNumber class="form-control inputstl" @bind-Value="album.Price" />
+        </div>
+
+        <div class="form-group">
+            <label>Release Date  : </label>
+            <InputDate class="form-control inputstl" @bind-Value="album.ReleaseDate" />
+        </div>
+
+        <div class="form-group">
+            <label>Album Cover Link  : </label>
+            <InputText class="form-control inputstl" @bind-Value="album.Cover" />
+        </div>
+
+
+        <div class="form-group">
+            <button @onclick="@(() => UpdateAlbum(album.Id))" class="btn btn-primary" type="submit">Update Album </button>
+        </div>
+    </EditForm>
+</div>
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        artist = await storageService.GetItemAsync<Artist>("loggedUser");
+        Console.WriteLine("oninitialized editalbymformcomponent"+AlbumId + " "+artist.Id);
+        album = await httpClient.GetFromJsonAsync<Album>($"api/Albums/{artist.Id}/{AlbumId}");
+
+    }
+
+    public async Task UpdateAlbum(long AlbumId)
+    {
+        album.Artist = artist;
+        await httpClient.PutAsJsonAsync<Album>($"api/Albums/{AlbumId}", album);
+        navigationManager.NavigateTo("ArtistAlbums");
+    }
+
+    [Parameter] public EventCallback<long> OnEdit { get; set; }
+    [Parameter] public long AlbumId { get; set; }
+    Artist artist = new Artist();
+    Album album = new Album();
+
+}

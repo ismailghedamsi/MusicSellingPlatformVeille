@@ -1,5 +1,6 @@
 ﻿@inject HttpClient client
 @inject ILocalStorageService storageService
+@inject NavigationManager navigationManager
 
 <h3>ArtistsAlbums</h3>
 
@@ -56,7 +57,7 @@
         @foreach (Album album in albums)
         {
             <div class="mat-layout-grid-cell">
-                <AlbumCard Album="@album" OnDelete="DeleteAlbum" />
+                <AlbumCard Album="@album" OnDelete="DeleteAlbum"  />
             </div>
 
         }
@@ -93,6 +94,8 @@
             }
         }
 
+
+
         public async Task AddAlbum()
         {
             if (artist != null)
@@ -109,6 +112,12 @@
                 }
 
             }
+        }
+
+        public void UpdateAlbum(long id)
+        {
+            //await client.PutAsJsonAsync<Album>($"api/Albums/{artistId}",Album);
+       
         }
 
         public async Task DeleteAlbum(long id)

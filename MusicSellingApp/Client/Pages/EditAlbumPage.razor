@@ -1,0 +1,6 @@
+﻿@page "/albums/edit/{AlbumId:long}"
+<EditAlbumFormComponent AlbumId="AlbumId"  />
+@code {
+    [Parameter] public long AlbumId { get; set; }
+
+}
