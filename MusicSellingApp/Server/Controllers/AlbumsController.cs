@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicSellingApp.Server;
+using MusicSellingApp.Server.Services;
 using MusicSellingApp.Shared.Entitities;
 
 namespace MusicSellingApp.Server.Controllers
@@ -15,27 +16,49 @@ namespace MusicSellingApp.Server.Controllers
     public class AlbumsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IAlbumService _albumRepository;
 
-        public AlbumsController(ApplicationDbContext context)
+        public AlbumsController(ApplicationDbContext context, IAlbumService albumRepository)
         {
             _context = context;
+            _albumRepository = albumRepository;
         }
 
         // GET: api/Albums
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Album>>> GetAlbums()
         {
-            return await _context.Albums.ToListAsync();
+            IEnumerable<Album> albums = await _albumRepository.GetAlbums();
+            if (albums == null)
+            {
+                NotFound(albums);
+            }
+            return Ok(albums.ToList());
         }
 
         [HttpGet("{artistId}")]
         public async Task<ActionResult<List<Album>>> GetAlbumsOfArtist(long artistId)
         {
-            List<Album> albums = await _context.Albums.Where(album => album.ArtistId == artistId).ToListAsync();
-            return albums;
+            var albums = await _albumRepository.GetAlbumsOfArtist(artistId);
+            if (albums == null)
+            {
+                NotFound(albums);
+            }
+            return Ok(albums);
         }
 
-  
+        [HttpGet("{artistId}/{albumId}")]
+        public async Task<ActionResult<Album>> GetAlbumsOfArtist(long artistId,long albumId)
+        {
+            var album = await _albumRepository.GetAlbumById(albumId);
+            if (album == null)
+            {
+                NotFound(album);
+            }
+            return Ok(album);
+        }
+
+
 
         // PUT: api/Albums/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -75,9 +98,11 @@ namespace MusicSellingApp.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Album>> PostAlbum(Album album)
         {
-            _context.Albums.Add(album);
-            await _context.SaveChangesAsync();
-
+            //await _albumRepository.PostAlbum(album);
+            if(album == null)
+            {
+                NotFound(album);
+            }
             return CreatedAtAction("GetAlbum", new { id = album.Id }, album);
         }
 
@@ -85,27 +110,20 @@ namespace MusicSellingApp.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Album>> DeleteAlbum(long id)
         {
-            var album = await _context.Albums.FindAsync(id);
-            Console.WriteLine("is album null " + album == null);
+            var album = await _albumRepository.GetAlbumById(id);
             if (album == null)
             {
-                return NotFound();
+                return NotFound(album);
             }
 
-            _context.Albums.Remove(album);
-            await _context.SaveChangesAsync();
+            await _albumRepository.DeleteAlbum(album);
 
-            return album;
-            //var album = new Album { Id = id };
-            //_context.Albums.Attach(album);
-            //_context.Albums.Remove(album);
-            //await _context.SaveChangesAsync();
-            //return Ok();
+            return Ok(album);
         }
 
         private bool AlbumExists(long id)
         {
-            return _context.Albums.Any(e => e.Id == id);
+            return _albumRepository.AlbumExists(id);
         }
     }
 }
