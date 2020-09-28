@@ -27,20 +27,11 @@
 
 
 @code {
-
-
-
     [Parameter] public  Album Album { get; set; }
     [Parameter] public EventCallback<long> OnDelete { get; set; }
     public Artist artist = new Artist();
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    artist = await localStorage.GetItemAsync<Artist>("loggedUser");
-    //}
-
     public void GoToEditAlbumForm(long albumId)
     {
         navigationManager.NavigateTo($"/albums/edit/{albumId}");
     }
-
 }
