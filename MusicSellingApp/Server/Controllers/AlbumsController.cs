@@ -16,19 +16,19 @@ namespace MusicSellingApp.Server.Controllers
     public class AlbumsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IAlbumService _albumRepository;
+        private readonly IAlbumService _albumService;
 
         public AlbumsController(ApplicationDbContext context, IAlbumService albumRepository)
         {
             _context = context;
-            _albumRepository = albumRepository;
+            _albumService = albumRepository;
         }
 
         // GET: api/Albums
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Album>>> GetAlbums()
         {
-            IEnumerable<Album> albums = await _albumRepository.GetAlbums();
+            IEnumerable<Album> albums = await _albumService.GetAlbums();
             if (albums == null)
             {
                 NotFound(albums);
@@ -39,7 +39,7 @@ namespace MusicSellingApp.Server.Controllers
         [HttpGet("{artistId}")]
         public async Task<ActionResult<List<Album>>> GetAlbumsOfArtist(long artistId)
         {
-            var albums = await _albumRepository.GetAlbumsOfArtist(artistId);
+            var albums = await _albumService.GetAlbumsOfArtist(artistId);
             if (albums == null)
             {
                 NotFound(albums);
@@ -50,7 +50,7 @@ namespace MusicSellingApp.Server.Controllers
         [HttpGet("{artistId}/{albumId}")]
         public async Task<ActionResult<Album>> GetAlbumsOfArtist(long artistId,long albumId)
         {
-            var album = await _albumRepository.GetAlbumById(albumId);
+            var album = await _albumService.GetAlbumById(albumId);
             if (album == null)
             {
                 NotFound(album);
@@ -98,7 +98,7 @@ namespace MusicSellingApp.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Album>> PostAlbum(Album album)
         {
-            //await _albumRepository.PostAlbum(album);
+            await _albumService.PostAlbum(album);
             if(album == null)
             {
                 NotFound(album);
@@ -110,20 +110,20 @@ namespace MusicSellingApp.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Album>> DeleteAlbum(long id)
         {
-            var album = await _albumRepository.GetAlbumById(id);
+            var album = await _albumService.GetAlbumById(id);
             if (album == null)
             {
                 return NotFound(album);
             }
 
-            await _albumRepository.DeleteAlbum(album);
+            await _albumService.DeleteAlbum(album);
 
             return Ok(album);
         }
 
         private bool AlbumExists(long id)
         {
-            return _albumRepository.AlbumExists(id);
+            return _albumService.AlbumExists(id);
         }
     }
 }

@@ -11,7 +11,6 @@ using System.Net.Http;
 using static System.Net.WebRequestMethods;
 using MusicSellingApp.Shared;
 using AutoMapper;
-using MusicSellingApp.Server.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
@@ -46,7 +45,6 @@ namespace MusicSellingApp.Server
             });
             services.AddScoped<MusicSellingApp.Shared.CustomHttpClient>();
             services.AddAutoMapper(typeof(Startup));
-            services.AddTransient<IUserRepository, UserRepository>();
             services.AddScoped<IAlbumService, AlbumService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
