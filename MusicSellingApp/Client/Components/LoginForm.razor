@@ -2,6 +2,7 @@
 @inject HttpClient httpClient
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 @inject ILocalStorageService storageService
+@inject IJSRuntime JSRuntime
 <h3>RegistrationForm</h3>
 
 
@@ -19,8 +20,8 @@
     <div class="form-group">
         <label>User type : </label>
         <InputSelect class="form-control inputstl" @bind-Value="userType">
-                <option value="Artist">Artist</option>
-                <option value="Fan">Fan</option>
+            <option value="Artist">Artist</option>
+            <option value="Fan">Fan</option>
         </InputSelect>
     </div>
 
@@ -50,14 +51,14 @@
 
             Artist artist = artists.Where(artist => artist.Username == credential.username && artist.Password == credential.password).FirstOrDefault();
 
-            if(artist == null)
+            if (artist == null)
             {
-                Console.WriteLine("Is null");
+                await JSRuntime.InvokeVoidAsync("alert", "Artist username or password invalid");
             }
             else
             {
                 await storageService.SetItemAsync<Artist>("loggedUser", artist);
-                NavigationManager.NavigateTo("ArtistAlbums",true);
+                NavigationManager.NavigateTo("ArtistAlbums", true);
             }
 
         }
@@ -67,13 +68,13 @@
             Fan fan = fans.Where(artist => artist.Username == credential.username && artist.Password == credential.password).FirstOrDefault();
             if (fan == null)
             {
-                Console.WriteLine("Is null");
+                await JSRuntime.InvokeVoidAsync("alert", "Fan username or password invalid");
             }
             else
             {
 
                 await storageService.SetItemAsync<Fan>("loggedUser", fan);
-                NavigationManager.NavigateTo("counter",true);
+                NavigationManager.NavigateTo("counter", true);
             }
 
         }
@@ -81,7 +82,7 @@
     }
 
 
-    }
+}
 
 
 }
