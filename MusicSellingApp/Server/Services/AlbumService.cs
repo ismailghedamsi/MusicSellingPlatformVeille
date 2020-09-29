@@ -10,7 +10,9 @@ namespace MusicSellingApp.Server.Services
 {
     public class AlbumService : IAlbumService
     {
-        private readonly ApplicationDbContext _context;
+        public  ApplicationDbContext Context { get; set; }
+
+
         public AlbumService()
         {
 
@@ -18,48 +20,48 @@ namespace MusicSellingApp.Server.Services
 
         public AlbumService(ApplicationDbContext context)
         {
-            _context = context;
+            Context = context;
         }
 
         public bool AlbumExists(long id)
         {
-            return _context.Albums.Any(e => e.Id == id);
+            return Context.Albums.Any(e => e.Id == id);
         }
 
         public async Task<Album> DeleteAlbum(Album album)
         {
-            _context.Albums.Remove(album);
-            await _context.SaveChangesAsync();
+            Context.Albums.Remove(album);
+            await Context.SaveChangesAsync();
             return album;
         }
 
         public async Task<Album> GetAlbumById(long id)
         {
-            Album album = await _context.Albums.FindAsync(id);
+            Album album = await Context.Albums.FindAsync(id);
             return album;
         }
 
         public async Task<IEnumerable<Album>> GetAlbums()
         {
-            return await _context.Albums.ToListAsync();
+            return await Context.Albums.ToListAsync();
         }
 
         public async Task<List<Album>> GetAlbumsOfArtist(long artistId)
         {
-            List<Album> albums = await _context.Albums.Where(album => album.ArtistId == artistId).ToListAsync();
+            List<Album> albums = await Context.Albums.Where(album => album.ArtistId == artistId).ToListAsync();
             return albums;
         }
 
         public async Task<Album> PostAlbum(Album album)
         {
-            _context.Albums.Add(album);
-            await _context.SaveChangesAsync();
+            Context.Albums.Add(album);
+            await Context.SaveChangesAsync();
             return album;
         }
 
         public async Task<Album> PutAlbum(long id, Album album)
         {
-            return await  _context.Albums.FirstAsync();
+            return await  Context.Albums.FirstAsync();
         }
 
  
