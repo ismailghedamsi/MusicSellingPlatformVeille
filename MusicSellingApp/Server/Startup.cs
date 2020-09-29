@@ -46,6 +46,8 @@ namespace MusicSellingApp.Server
             services.AddScoped<MusicSellingApp.Shared.CustomHttpClient>();
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IAlbumService, AlbumService>();
+            services.AddScoped<IArtistService, ArtistService>();
+            services.AddScoped<IFanService, FanService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicSellingApp.Server;
+using MusicSellingApp.Server.Services;
 using MusicSellingApp.Shared.Entitities;
 
 namespace MusicSellingApp.Server.Controllers
@@ -15,31 +16,36 @@ namespace MusicSellingApp.Server.Controllers
     public class FansController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFanService _fanService;
 
-        public FansController(ApplicationDbContext context)
+        public FansController(ApplicationDbContext context, IFanService fanService)
         {
             _context = context;
+            _fanService = fanService;
         }
+
+
 
         // GET: api/Fans
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Fan>>> GetFans()
         {
-            return await _context.Fans.ToListAsync();
+            IEnumerable<Fan> fans = await _fanService.GetFans();
+            return Ok(fans);
         }
 
         // GET: api/Fans/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Fan>> GetFan(long id)
         {
-            var fan = await _context.Fans.FindAsync(id);
+            var fan = await _fanService.GetFanById(id);
 
             if (fan == null)
             {
                 return NotFound();
             }
 
-            return fan;
+            return Ok(fan);
         }
 
         // PUT: api/Fans/5
@@ -80,31 +86,29 @@ namespace MusicSellingApp.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Fan>> PostFan(Fan fan)
         {
-            _context.Fans.Add(fan);
-            await _context.SaveChangesAsync();
+            await _fanService.PostFan(fan);
 
-            return CreatedAtAction("GetFan", new { id = fan.Id }, fan);
+            return StatusCode(201, fan);
         }
 
         // DELETE: api/Fans/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Fan>> DeleteFan(long id)
         {
-            var fan = await _context.Fans.FindAsync(id);
+            var fan = await _fanService.GetFanById(id);
             if (fan == null)
             {
                 return NotFound();
             }
 
-            _context.Fans.Remove(fan);
-            await _context.SaveChangesAsync();
+            await _fanService.DeleteFan(fan);
 
-            return fan;
+            return Ok(fan);
         }
 
         private bool FanExists(long id)
         {
-            return _context.Fans.Any(e => e.Id == id);
+            return _fanService.FanExists(id);
         }
     }
 }

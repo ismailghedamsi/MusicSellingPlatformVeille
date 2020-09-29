@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicSellingApp.Server;
+using MusicSellingApp.Server.Services;
 using MusicSellingApp.Shared.Entitities;
 
 namespace MusicSellingApp.Server.Controllers
@@ -16,32 +17,37 @@ namespace MusicSellingApp.Server.Controllers
     public class ArtistsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IArtistService _artistService;
 
- 
-
-        public ArtistsController(ApplicationDbContext context)
+        public ArtistsController(ApplicationDbContext context, IArtistService artistService)
         {
             _context = context;
+            _artistService = artistService;
         }
 
         // GET: api/Artists
         public async Task<ActionResult<IEnumerable<Artist>>> GetArtists()
         {
-            return await _context.Artists.ToListAsync();
+            IEnumerable<Artist> artists = await _artistService.GetArtists();
+            if (artists == null)
+            {
+                return NotFound(artists);
+            }
+            return Ok(artists.ToList());
         }
 
         // GET: api/Artists/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Artist>> GetArtist(long id)
+        public async Task<ActionResult<Artist>> GetArtistById(long id)
         {
-            var artist = await _context.Artists.FindAsync(id);
+            var artist = await _artistService.GetArtistById(id);
 
             if (artist == null)
             {
-                return NotFound();
+                return NotFound(artist);
             }
 
-            return artist;
+            return Ok(artist);
         }
 
         // PUT: api/Artists/5
@@ -54,11 +60,7 @@ namespace MusicSellingApp.Server.Controllers
            
             try
             {
-  
-                var author = new Artist { Id = id };
-                _context.Attach(author);
-                author.Discography.Add(album);
-                await _context.SaveChangesAsync();
+               await _artistService.PutArtist(id, album);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -72,7 +74,7 @@ namespace MusicSellingApp.Server.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Artists
@@ -81,26 +83,23 @@ namespace MusicSellingApp.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Artist>> PostArtist(Artist artist)
         {
-            _context.Artists.Add(artist);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetArtist", new { id = artist.Id }, artist);
+            await _artistService.PostArtist(artist);
+            return StatusCode(201, artist);
         }
 
         // DELETE: api/Artists/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Artist>> DeleteArtist(long id)
         {
-            var artist = await _context.Artists.FindAsync(id);
+            var artist = await _artistService.GetArtistById(id);
             if (artist == null)
             {
                 return NotFound();
             }
 
-            _context.Artists.Remove(artist);
-            await _context.SaveChangesAsync();
+            await _artistService.DeleteArtist(artist);
 
-            return artist;
+            return Ok(artist);
         }
 
         private bool ArtistExists(long id)
