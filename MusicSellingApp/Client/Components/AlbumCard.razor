@@ -1,35 +1,55 @@
 ﻿@inject NavigationManager navigationManager
 @inject ILocalStorageService localStorage
-    @if (Album != null)
-    {
+@inject HttpClient client
+@if (Album != null)
+{
 
-                <BSCard CardType="CardType.Card">
+    <BSCard CardType="CardType.Card">
 
-                    <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="@Album.Cover" alt="Card image cap" />
+        <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="@Album.Cover" alt="Card image cap" />
 
-                    <BSCard CardType="CardType.Body">
-                        <BSCard CardType="CardType.Title">@Album.AlbumName</BSCard>
+        <BSCard CardType="CardType.Body">
+            <BSCard CardType="CardType.Title">@Album.AlbumName</BSCard>
 
-                        <BSCard CardType="CardType.Columns">@Album.Id</BSCard>
-                        <BSCard CardType="CardType.Subtitle">@Album.Genre</BSCard>
+            <BSCard CardType="CardType.Columns">@Album.Id</BSCard>
+            <BSCard CardType="CardType.Subtitle">@Album.Genre</BSCard>
 
-                        <BSCard CardType="CardType.Text">@Album.Description</BSCard>
+            <BSCard CardType="CardType.Text">@Album.Description</BSCard>
 
-                        <BSButton @onclick="() => OnDelete.InvokeAsync(Album.Id)">Delete</BSButton>
-                        <BSButton @onclick="@(() => GoToEditAlbumForm(Album.Id))">Update</BSButton>
+            @if (User.GetType().Name == "Artist")
+            {
+                <BSButton @onclick="() => OnDelete.InvokeAsync(Album.Id)">Delete</BSButton>
+                <BSButton @onclick="@(() => GoToEditAlbumForm(Album.Id))">Update</BSButton>
+            }
+            else
+            {
+                <BSButton @onclick="AddToCart">Add to cart</BSButton>
+            }
 
+        </BSCard>
 
-                    </BSCard>
+    </BSCard>
 
-                </BSCard>
-    
-    }
+}
 
 
 @code {
-    [Parameter] public  Album Album { get; set; }
+    [Parameter] public Album Album { get; set; }
     [Parameter] public EventCallback<long> OnDelete { get; set; }
-    public Artist artist = new Artist();
+    [Parameter] public User User { get; set; }
+
+    public  async Task AddToCart()
+    {
+        if (User.GetType().Name == "Fan")
+        {
+            Fan fan = (Fan)User;
+            Console.WriteLine(fan.FirstName);
+            fan.Library.Add(Album);
+            await client.PutAsJsonAsync<Fan>($"/api/Fans/{fan.Id}", fan);
+
+        }
+    }
+
     public void GoToEditAlbumForm(long albumId)
     {
         navigationManager.NavigateTo($"/albums/edit/{albumId}");
