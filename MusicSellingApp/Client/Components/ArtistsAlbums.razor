@@ -1,4 +1,5 @@
-﻿@inject HttpClient client
+﻿
+@inject HttpClient client
 @inject ILocalStorageService storageService
 @inject NavigationManager navigationManager
 
@@ -69,7 +70,7 @@
             @foreach (Album album in albums)
             {
                 <div class="mat-layout-grid-cell">
-                    <AlbumCard Album="@album" OnDelete="DeleteAlbum" />
+                    <AlbumCard User="@artist" Album="@album" OnDelete="DeleteAlbum" />
                 </div>
 
             }
