@@ -12,7 +12,7 @@ namespace MusicSellingApp.Server.Services
         Task<Fan> GetFanById(long id);
         Task<IEnumerable<Fan>> GetFans();
         Task<Fan> DeleteFan(Fan fan);
-        Task<Fan> PutFan(long id, Fan fan);
+        Task<Fan> PutFan(long id, Album fan);
         Task<Fan> PostFan(Fan fan);
         bool FanExists(long id);
     }

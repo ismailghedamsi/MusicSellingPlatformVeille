@@ -45,9 +45,13 @@ namespace MusicSellingApp.Server.Services
             return fan;
         }
 
-        public Task<Fan> PutFan(long id, Fan fan)
+        public async Task<Fan> PutFan(long id, Album album)
         {
-            throw new NotImplementedException();
+            var fan = new Fan { Id = id };
+            _context.Attach(fan);
+            fan.Library.Add(album);
+            await _context.SaveChangesAsync();
+            return fan;
         }
     }
 }
