@@ -55,12 +55,10 @@ namespace ServicesTests
             Fan fan = new Fan { Id = testingId, FirstName = "Fan 1" };
 
 
-            using (var context = new ApplicationDbContext(options))
-            {
-                FanService fanService = new FanService(context);
-                Fan actual = await fanService.PostFan(fan);
-                Assert.Equal(fan, actual);
-            }
+            using var context = new ApplicationDbContext(options);
+            FanService fanService = new FanService(context);
+            Fan actual = await fanService.PostFan(fan);
+            Assert.Equal(fan, actual);
         }
 
 

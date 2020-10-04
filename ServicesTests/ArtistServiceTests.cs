@@ -18,10 +18,6 @@ namespace ServicesTests
         protected  AlbumService AlbumService;
         protected List<Album> MockData;
         protected DbSet<Album> MockSet;
-        Album album;
-        AlbumService albumService;
-
-   
 
         public ArtistServiceTests()
         {
@@ -62,12 +58,10 @@ namespace ServicesTests
             Artist artist = new Artist { Id = testingId, Name = "Artist 1" };
 
 
-            using (var context = new ApplicationDbContext(options))
-            {
-                ArtistService artistService = new ArtistService(context);
-                Artist actual = await artistService.PostArtist(artist);
-                Assert.Equal(artist, actual);
-            }
+            using ApplicationDbContext context = new ApplicationDbContext(options);
+            ArtistService artistService = new ArtistService(context);
+            Artist actual = await artistService.PostArtist(artist);
+            Assert.Equal(artist, actual);
         }
 
 

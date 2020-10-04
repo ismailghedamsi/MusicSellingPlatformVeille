@@ -18,10 +18,6 @@ namespace ServicesTests
         protected  AlbumService AlbumService;
         protected List<Album> MockData;
         protected DbSet<Album> MockSet;
-        Album album;
-        AlbumService albumService;
-
-   
 
         public AlbumServiceTests()
         {
@@ -34,7 +30,6 @@ namespace ServicesTests
            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
            .Options;
             Album album = null;
-            Random random = new Random();
             var testingId = 457;
 
             using (var context = new ApplicationDbContext(options))
@@ -59,18 +54,14 @@ namespace ServicesTests
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
            .Options;
-            Album album = null;
-            Random random = new Random();
             var testingId = 457;
-                album = new Album { Id = testingId, AlbumName = "Album 1" };
+            Album album = new Album { Id = testingId, AlbumName = "Album 1" };
 
 
-            using (var context = new ApplicationDbContext(options))
-            {
-                AlbumService albumService = new AlbumService(context);
-                Album actual = await albumService.PostAlbum(album);
-                Assert.Equal(album, actual);
-            }
+            using var context = new ApplicationDbContext(options);
+            AlbumService albumService = new AlbumService(context);
+            Album actual = await albumService.PostAlbum(album);
+            Assert.Equal(album, actual);
         }
 
 
@@ -81,7 +72,6 @@ namespace ServicesTests
              .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
              .Options;
             Album album = null;
-            Random random = new Random();
             var testingId = 5;
             // Insert seed data into the database using one instance of the context
             using (var context = new ApplicationDbContext(options))
