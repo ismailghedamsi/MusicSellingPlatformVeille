@@ -45,11 +45,30 @@ namespace MusicSellingApp.Server.Services
             return fan;
         }
 
-        public async Task<Fan> PutFan(long id, Album album)
+        public async Task<Fan> PutFan(long id, Cart cart)
         {
             var fan = new Fan { Id = id };
             _context.Attach(fan);
-            fan.Library.Add(album);
+            fan.Cart = cart;
+            //fan.Library.Add(album);
+            await _context.SaveChangesAsync();
+            return fan;
+        }
+
+        public async Task<Fan> PutFanWithCart(Fan fan,Cart cart)
+        {
+
+            fan.Cart = cart;
+
+            // Attach target with old customer
+            _context.Fans.Attach(fan);
+            // Attach second customer
+            _context.Carts.Attach(cart);
+
+
+            // Change target's state to Modified
+            _context.Entry(fan).State = EntityState.Modified;
+            _context.SaveChanges();
             await _context.SaveChangesAsync();
             return fan;
         }
