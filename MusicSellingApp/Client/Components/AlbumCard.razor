@@ -12,7 +12,6 @@
         <BSCard CardType="CardType.Body">
             <BSCard CardType="CardType.Title">Album Name : @Album.AlbumName</BSCard>
 
-            @*<BSCard CardType="CardType.Columns">@Album.Id</BSCard>*@
             <BSCard CardType="CardType.Subtitle">Genre @Album.Genre</BSCard>
 
             <BSCard CardType="CardType.Text">Album Description @Album.Description</BSCard>
@@ -56,11 +55,11 @@
 
             Fan fan = (Fan)User;
             Order order = new Order(Album, quantity);
+            Console.WriteLine("Quantity" + order.Quantity);
             List<Order> orders = new List<Order>();
             orders.Add(order);
             Cart cart = new Cart(fan,orders);
-            await Js.InvokeVoidAsync("updateQuanity");
-            quantity = await Js.InvokeAsync<int>("GetValue");
+            fan.Cart = cart;
             await client.PutAsJsonAsync<Fan>($"/api/Fans/{fan.Id}", fan);
 
         }
