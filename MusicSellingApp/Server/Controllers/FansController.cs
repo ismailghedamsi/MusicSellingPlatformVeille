@@ -52,18 +52,11 @@ namespace MusicSellingApp.Server.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFan(long id, Fan fan)
+        public async Task<IActionResult> PutFan(long id, Album album)
         {
-            if (id != fan.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(fan).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _fanService.PutFan(id, album );
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -77,7 +70,7 @@ namespace MusicSellingApp.Server.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Fans
