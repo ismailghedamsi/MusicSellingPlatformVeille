@@ -7,7 +7,21 @@ namespace MusicSellingApp.Shared.Entitities
     public class Cart
     {
         public long Id { get; set; }
-        public Fan fan { get; set; }
-        public List<Order> orders;
+
+        public long CartOwnerId { get; set; }
+        public Fan Fan { get; set; }
+
+        public List<Order> Orders { get; set; }
+
+        public Cart()
+        {
+
+        }
+
+        public Cart(Fan fan, List<Order> orders)
+        {
+            Fan = fan;
+            Orders = orders;
+        }
     }
 }

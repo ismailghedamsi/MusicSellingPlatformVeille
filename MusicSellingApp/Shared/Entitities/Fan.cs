@@ -7,6 +7,7 @@ namespace MusicSellingApp.Shared.Entitities
 {
     public class Fan : User
     {
+        public Cart Cart { get; set; }
 
         [Required]
         [MinLength(2)]
