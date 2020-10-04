@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using MusicSellingApp.Server.Services;
+using Newtonsoft.Json.Serialization;
 
 namespace MusicSellingApp.Server
 {
@@ -41,6 +42,7 @@ namespace MusicSellingApp.Server
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 //options.SerializerSettings.Converters.Add(new UserJsonConverter());
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
             services.AddScoped<MusicSellingApp.Shared.CustomHttpClient>();
