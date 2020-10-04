@@ -1,0 +1,42 @@
+﻿@page "/musicCatalog"
+@inject ILocalStorageService storageService
+@inject NavigationManager navigationManager
+@inject HttpClient client
+
+<div class="mat-layout-grid-inner">
+    @foreach (Album album in albums)
+    {
+        <div class="mat-layout-grid-cell">
+            <AlbumCard User="@fan" Album="@album" />
+        </div>
+
+    }
+</div>
+
+@code {
+
+    bool shouldDisplayNoAlbumMessage = false;
+    bool shouldShowWaitingMessage = true;
+    User fan;
+    long artistId;
+    public List<Album> albums = new List<Album>();
+
+    public Album Album { get; set; } = new Album();
+    string artistName = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        fan = await storageService.GetItemAsync<Fan>("loggedUser");
+        if (fan != null)
+        {
+
+            albums = await client.GetFromJsonAsync<List<Album>>("api/Albums");
+        }
+        else
+        {
+            shouldDisplayNoAlbumMessage = true;
+        }
+        Console.WriteLine("count " + albums.Count);
+    }
+}
