@@ -1,6 +1,7 @@
 ﻿@inject NavigationManager navigationManager
 @inject ILocalStorageService localStorage
 @inject HttpClient client
+@inject IJSRuntime Js
 @if (Album != null)
 {
 
@@ -9,12 +10,12 @@
         <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="@Album.Cover" alt="Card image cap" />
 
         <BSCard CardType="CardType.Body">
-            <BSCard CardType="CardType.Title">@Album.AlbumName</BSCard>
+            <BSCard CardType="CardType.Title">Album Name : @Album.AlbumName</BSCard>
 
-            <BSCard CardType="CardType.Columns">@Album.Id</BSCard>
-            <BSCard CardType="CardType.Subtitle">@Album.Genre</BSCard>
+            @*<BSCard CardType="CardType.Columns">@Album.Id</BSCard>*@
+            <BSCard CardType="CardType.Subtitle">Genre @Album.Genre</BSCard>
 
-            <BSCard CardType="CardType.Text">@Album.Description</BSCard>
+            <BSCard CardType="CardType.Text">Album Description @Album.Description</BSCard>
 
             @if (User.GetType().Name == "Artist")
             {
@@ -23,7 +24,14 @@
             }
             else
             {
+                <BSCard CardType="CardType.Text">Artist : @Album.Artist.Name</BSCard>
+                <div class="container">
+                    <input type="button" @onclick="@Decrement" class="btn btn-danger btn-number" value="-" />
+                    <input type="text" value="@quantity" name="quantity" maxlength="2" max="10" size="1" id="number" />
+                    <input type="button" @onclick="@Increment" class="btn btn-success btn-number" value="+" />
+                </div>
                 <BSButton @onclick="AddToCart">Add to cart</BSButton>
+
             }
 
         </BSCard>
@@ -38,16 +46,34 @@
     [Parameter] public EventCallback<long> OnDelete { get; set; }
     [Parameter] public User User { get; set; }
 
+
+
+    public int quantity = 1;
     public  async Task AddToCart()
     {
         if (User.GetType().Name == "Fan")
         {
+
             Fan fan = (Fan)User;
-            Console.WriteLine(fan.FirstName);
-            fan.Library.Add(Album);
+            Order order = new Order(Album, quantity);
+            List<Order> orders = new List<Order>();
+            orders.Add(order);
+            Cart cart = new Cart(fan,orders);
+            await Js.InvokeVoidAsync("updateQuanity");
+            quantity = await Js.InvokeAsync<int>("GetValue");
             await client.PutAsJsonAsync<Fan>($"/api/Fans/{fan.Id}", fan);
 
         }
+    }
+
+    public void Increment()
+    {
+        quantity++;
+    }
+
+    public void Decrement()
+    {
+        quantity--;
     }
 
     public void GoToEditAlbumForm(long albumId)
