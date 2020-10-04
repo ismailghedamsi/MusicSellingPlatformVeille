@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace MusicSellingApp.Shared.Entitities
 {
+    [JsonObject(IsReference = true)]
     public class Fan : User
     {
         public Cart Cart { get; set; }
@@ -33,7 +35,7 @@ namespace MusicSellingApp.Shared.Entitities
             Library = new List<Album>();
         }
 
-        public Fan(string firstName, string lastName, List<Album> library,long id,int age) 
+        public Fan(string firstName, string lastName, List<Album> library)
         {
             FirstName = firstName;
             LastName = lastName;

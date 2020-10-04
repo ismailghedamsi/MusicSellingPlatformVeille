@@ -6,6 +6,8 @@ namespace MusicSellingApp.Shared.Entitities
 {
     public class Album
     {
+
+
         public long ArtistId { get; set; }
         public Artist Artist { get; set; }
         public long Id { get; set; }
@@ -25,6 +27,8 @@ namespace MusicSellingApp.Shared.Entitities
         {
 
         }
+
+
         public Album(string albumName, DateTime releaseDate, Genre genre, string cover, double price, string description)
         {
             AlbumName = albumName;
@@ -33,6 +37,35 @@ namespace MusicSellingApp.Shared.Entitities
             Cover = cover;
             Price = price;
             Description = description;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Album album &&
+                   ArtistId == album.ArtistId &&
+                   EqualityComparer<Artist>.Default.Equals(Artist, album.Artist) &&
+                   Id == album.Id &&
+                   AlbumName == album.AlbumName &&
+                   ReleaseDate == album.ReleaseDate &&
+                   Genre == album.Genre &&
+                   Cover == album.Cover &&
+                   Price == album.Price &&
+                   Description == album.Description;
+        }
+
+        public override int GetHashCode()
+        {
+            HashCode hash = new HashCode();
+            hash.Add(ArtistId);
+            hash.Add(Artist);
+            hash.Add(Id);
+            hash.Add(AlbumName);
+            hash.Add(ReleaseDate);
+            hash.Add(Genre);
+            hash.Add(Cover);
+            hash.Add(Price);
+            hash.Add(Description);
+            return hash.ToHashCode();
         }
     }
 }

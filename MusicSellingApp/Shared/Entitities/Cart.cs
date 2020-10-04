@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,11 +12,17 @@ namespace MusicSellingApp.Shared.Entitities
         public long CartOwnerId { get; set; }
         public Fan Fan { get; set; }
 
+
         public List<Order> Orders { get; set; }
 
         public Cart()
         {
 
+        }
+
+        public Cart(List<Order> orders)
+        {
+            Orders = orders;
         }
 
         public Cart(Fan fan, List<Order> orders)
