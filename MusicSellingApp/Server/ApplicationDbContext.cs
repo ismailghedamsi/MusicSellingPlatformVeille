@@ -1,70 +1,80 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.Configuration;
 using MusicSellingApp.Shared.Entitities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MusicSellingApp.Server
 {
     public class ApplicationDbContext : DbContext
     {
-
+      
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-         {
-
-         }
+        {
+        }
 
         public ApplicationDbContext()
         {
-
         }
 
-        public virtual DbSet<TodoItem> Todos { get; set; }
-        public virtual DbSet<Admin> Admins { get; set; }
-        public virtual DbSet<Artist> Artists { get; set; }
-        public virtual DbSet<Fan> Fans { get; set; }
-        public virtual DbSet<Album> Albums { get; set; }
-        public virtual DbSet<Cart> Carts { get; set; }
-        public virtual DbSet<Song> Songs { get; set; }
-        public virtual DbSet<TrackList> TrackLists { get; set; }
-        public virtual  DbSet<User> Users { get; set; }
+
+        public DbSet<TodoItem> Todos { get; set; }
+
+        public DbSet<Admin> Admins { get; set; }
+
+        public DbSet<Artist> Artists { get; set; }
+
+        public DbSet<Fan> Fans { get; set; }
+
+        public DbSet<Album> Albums { get; set; }
+  
+        public DbSet<Cart> Carts { get; set; }
+  
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<Song> Songs { get; set; }
+
+        public DbSet<TrackList> TrackLists { get; set; }
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-            optionsBuilder.EnableSensitiveDataLogging();
-            base.OnConfiguring(optionsBuilder);
+        public DbSet<User> Users { get; set; }
 
-        }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    IConfigurationRoot configuration = new ConfigurationBuilder()
+        //    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+        //    .AddJsonFile("appsettings.json")
+        //    .Build();
+        //    optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        //    optionsBuilder.EnableSensitiveDataLogging();
+        //    base.OnConfiguring(optionsBuilder);
+        //}
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<MoviesActors>().HasKey(x => new { x.MovieId, x.PersonId });
-            //modelBuilder.Entity<MoviesGenres>().HasKey(x => new { x.MovieId, x.GenreId });
 
+            foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.NoAction;
+            }
 
-            modelBuilder.Entity<Album>()
-            .HasOne(a => a.Artist)
-            .WithMany(b => b.Discography);
-            //.HasForeignKey(p => p.Id);
+            modelBuilder.Entity<Fan>()
+            .HasOne(c => c.Cart)
+            .WithOne(f => f.Fan)
+            .HasForeignKey<Cart>(c => c.CartOwnerId);
 
-
+            modelBuilder.Entity<Cart>()
+            .HasMany(c => c.Orders)
+            .WithOne(e => e.Cart);
 
             modelBuilder.Entity<Artist>()
-       .HasIndex(u => u.Username)
-       .IsUnique();
+            .HasIndex(u => u.Username)
+            .IsUnique();
 
             modelBuilder.Entity<Artist>()
-    .HasIndex(u => u.Email)
-    .IsUnique();
+    .       HasIndex(u => u.Email)
+            .IsUnique();
 
 
             modelBuilder

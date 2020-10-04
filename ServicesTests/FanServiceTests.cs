@@ -22,6 +22,34 @@ namespace ServicesTests
         }
 
         [Fact]
+        public async Task UpdateFanTest()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+         .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+         .Options;
+            Fan fan = null;
+         
+            using (var context = new ApplicationDbContext(options))
+            {
+
+                context.Fans.Attach(fan);
+                context.Carts.Attach(new Cart());
+                context.Entry(fan).State = EntityState.Modified;
+                context.SaveChanges();
+                await context.SaveChangesAsync();
+
+            }
+            using (var context = new ApplicationDbContext(options))
+            {
+                FanService fanService = new FanService(context);
+                Fan actual = await fanService.PutFanWithCart(fan, fan.Cart);
+                Assert.Equal(fan, actual);
+            }
+
+        }
+
+
+        [Fact]
         public async Task DeleteFanTest()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
