@@ -43,7 +43,7 @@ namespace MusicSellingApp.Server.Services
 
         public async Task<IEnumerable<Album>> GetAlbums()
         {
-            return await Context.Albums.ToListAsync();
+            return await Context.Albums.Include(a => a.Artist).ToListAsync();
         }
 
         public async Task<List<Album>> GetAlbumsOfArtist(long artistId)
