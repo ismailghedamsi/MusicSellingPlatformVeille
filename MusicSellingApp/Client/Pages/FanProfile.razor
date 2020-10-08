@@ -1,0 +1,14 @@
+﻿@page "/fanProfile"
+@inject ILocalStorageService storageService
+    <h2>@(fan == null)</h2>
+   <UserInfoComponent User="@fan" />
+
+
+@code{
+    Fan fan;
+    protected override async Task OnInitializedAsync()
+    {
+        fan = await storageService.GetItemAsync<Fan>("loggedUser");
+    }
+
+}

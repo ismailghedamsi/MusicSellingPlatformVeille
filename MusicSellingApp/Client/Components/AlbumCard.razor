@@ -58,9 +58,12 @@
             Console.WriteLine("Quantity" + order.Quantity);
             List<Order> orders = new List<Order>();
             orders.Add(order);
-            Cart cart = new Cart(fan,orders);
-            fan.Cart = cart;
-            await client.PutAsJsonAsync<Fan>($"/api/Fans/{fan.Id}", fan);
+            //Cart cart = new Cart(fan,orders); 
+            Cart cart = new Cart();
+            cart.Fan = fan;
+            //fan.Cart = cart;
+            //await client.PutAsJsonAsync<Fan>($"/api/Fans/{fan.Id}", fan);
+            await client.PostAsJsonAsync<Cart>("api/Carts",cart);
 
         }
     }
