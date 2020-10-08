@@ -22,6 +22,7 @@
         <InputSelect class="form-control inputstl" @bind-Value="userType">
             <option value="Artist">Artist</option>
             <option value="Fan">Fan</option>
+            <option value="Admin">Admin</option>
         </InputSelect>
     </div>
 
@@ -62,7 +63,7 @@
             }
 
         }
-        else
+        else if (userType == "Fan")
         {
             List<Fan> fans = await httpClient.GetFromJsonAsync<List<Fan>>("api/Fans");
             Fan fan = fans.Where(artist => artist.Username == credential.username && artist.Password == credential.password).FirstOrDefault();
@@ -74,11 +75,24 @@
             {
 
                 await storageService.SetItemAsync<Fan>("loggedUser", fan);
-                NavigationManager.NavigateTo("counter", true);
+                NavigationManager.NavigateTo("MusicCatalog", true);
             }
-
         }
+        else
+        {
+            List<Admin> admins = await httpClient.GetFromJsonAsync<List<Admin>>("api/Admins");
+            Admin admin = admins.Where(a => a.Username == credential.username && a.Password == credential.password).FirstOrDefault();
+            if (admin == null)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Admin username or password invalid");
+            }
+            else
+            {
 
+                await storageService.SetItemAsync<Admin>("loggedUser", admin);
+                NavigationManager.NavigateTo("adminPage", true);
+            }
+        }
     }
 
 
