@@ -1,21 +1,14 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http;
-using static System.Net.WebRequestMethods;
-using MusicSellingApp.Shared;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using MusicSellingApp.Server.Services;
 using Newtonsoft.Json.Serialization;
+using Syncfusion.Blazor;
 
 namespace MusicSellingApp.Server
 {
@@ -51,6 +44,7 @@ namespace MusicSellingApp.Server
             services.AddScoped<IArtistService, ArtistService>();
             services.AddScoped<IFanService, FanService>();
             services.AddControllersWithViews();
+            services.AddSyncfusionBlazor();
             services.AddRazorPages();
         }
 
