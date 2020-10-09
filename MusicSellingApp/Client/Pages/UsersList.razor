@@ -1,0 +1,66 @@
+﻿@page "/adminPage"
+@using System.Net.Http
+@inject HttpClient Http
+@inject ILocalStorageService storageService
+@if (users != null)
+{
+    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterMode="FilterMode.Advanced" AllowPaging="true" PageSize="4"
+          @ref="usersGrid"   AllowSorting="true"  Data="@users" TItem="User" ColumnWidth="200px " EditMode="DataGridEditMode.Multiple">
+        <Columns>
+            <RadzenGridColumn TItem="User" Property="Username" Title="Username" Type="" />
+            <RadzenGridColumn TItem="User" Property="Password" Title="Password" />
+            <RadzenGridColumn TItem="User" Property="Email" Title="Email" />
+            <RadzenGridColumn TItem="User" Property="Descriminator" Title="Type" />
+            <RadzenGridColumn TItem="User" Property="IsActive" Title="Is Active" />
+            <RadzenGridColumn TItem="User" Context="sampleBlazorModelsSampleOrder"  Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="300px">
+                <Template Context="user">
+                    <RadzenButton Text="@banUnbadMessage" Click="@(args => EditRow(user))">
+                    </RadzenButton>
+                </Template>
+                <EditTemplate Context="user">
+                    <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) => SaveRow(user))">
+                    </RadzenButton>
+                    <RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => CancelEdit(user))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="User" Context="order" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+}
+
+
+@code {
+    RadzenGrid<User> usersGrid;
+    IEnumerable<User> users;
+    bool isActive = true;
+    string banUnbadMessage = "Ban/Unban user";
+    protected async override Task OnInitializedAsync()
+    {
+        users = await Http.GetFromJsonAsync<List<User>>("api/Users");
+        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzMxMTYwQDMxMzgyZTMzMmUzMFlVVU92cDRLNHI0bE96N2g1U0w2WUFjZHBJZytoTnNnbklKOG1rMmZvWDA9");
+    }
+
+    void EditRow(User user)
+    {
+        user.IsActive = !user.IsActive;
+        banUnbadMessage = user.IsActive ? "Ban User" : "Unban User";
+        usersGrid.EditRow(user);
+    }
+
+    async Task SaveRow(User user)
+    {
+        await Http.PutAsJsonAsync<User>($"api/Users/{user.Id}",user);
+        await usersGrid.UpdateRow(user);
+    }
+
+    void CancelEdit(User user)
+    {
+        banUnbadMessage = user.IsActive ? "Ban User" : "Unban User";
+        usersGrid.CancelEditRow(user);
+    }
+
+
+
+}
