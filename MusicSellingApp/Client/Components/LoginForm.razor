@@ -3,8 +3,6 @@
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 @inject ILocalStorageService storageService
 @inject IJSRuntime JSRuntime
-<h3>RegistrationForm</h3>
-
 
 <EditForm Model="@credential" OnValidSubmit="@Authenticate">
     <div class="form-group">
@@ -25,12 +23,7 @@
             <option value="Admin">Admin</option>
         </InputSelect>
     </div>
-
-
     <button class="btn btn-primary">Login </button>
-
-
-
 </EditForm>
 @if (loginError)
 {
@@ -55,6 +48,9 @@
             if (artist == null)
             {
                 await JSRuntime.InvokeVoidAsync("alert", "Artist username or password invalid");
+            } else if (artist.IsActive == false)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "You are banned for the website");
             }
             else
             {
@@ -70,6 +66,9 @@
             if (fan == null)
             {
                 await JSRuntime.InvokeVoidAsync("alert", "Fan username or password invalid");
+            }else if (!fan.IsActive)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "You are banned for the website");
             }
             else
             {
@@ -94,9 +93,5 @@
             }
         }
     }
-
-
 }
-
-
 }

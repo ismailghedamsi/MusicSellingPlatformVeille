@@ -30,6 +30,8 @@ namespace MusicSellingApp.Shared.Entitities
         [EmailAddress]
         public string Email { get; set; }
 
+        public bool IsActive { get; set; } =  true;
+
         public User()
         {
          
