@@ -64,6 +64,14 @@
                 </NavLink>
             </li>
         }
+        else if (user != null && user.Descriminator == "Admin")
+        {
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="adminPage">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> List users
+                </NavLink>
+            </li>
+        }
 
     </ul>
 </div>
