@@ -1,0 +1,52 @@
+﻿@if (User != null && User.GetType().Name == "Fan")
+{
+    <BSCard CardType="CardType.Card">
+        <BSCard CardType="CardType.Body">
+            <BSCard CardType="CardType.Title">Email : @User.Email</BSCard>
+
+            <BSCard CardType="CardType.Text">Username : @User.Username</BSCard>
+
+            <BSCard CardType="CardType.Text">Firstname : @ConvertFan().FirstName</BSCard>
+            <BSCard CardType="CardType.Text">Lastname : @ConvertFan().LastName</BSCard>
+
+        </BSCard>
+    </BSCard>
+}
+else if(User != null && User.GetType().Name == "Artist")
+{
+    <BSCard CardType="CardType.Card">
+        <BSCard CardType="CardType.Body">
+            <BSCard CardType="CardType.Title">Email : @User.Email</BSCard>
+
+            <BSCard CardType="CardType.Text">Genre @User.Username</BSCard>
+
+            <BSCard CardType="CardType.Text">Name : @ConvertArtist().Name</BSCard>
+            <BSCard CardType="CardType.Text">Age : @ConvertArtist().Age</BSCard>
+
+        </BSCard>
+    </BSCard>
+}
+
+
+
+@code {
+    [Parameter] public User User { get; set; }
+
+    public Fan ConvertFan()
+    {
+        if (User.GetType().Name == "Fan")
+        {
+            return (Fan)User;
+        }
+        return null;
+    }
+
+    public Artist ConvertArtist()
+    {
+        if (User.GetType().Name == "Artist")
+        {
+            return (Artist)User;
+        }
+        return null;
+    }
+}
