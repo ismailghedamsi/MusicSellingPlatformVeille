@@ -11,12 +11,24 @@
     <link href="css/FormStyling.css" rel="stylesheet" />
     <script src="_content/MatBlazor/dist/matBlazor.js"></script>
     <link href="_content/MatBlazor/dist/matBlazor.css" rel="stylesheet" />
-    <script src="js/JsMethods.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="_content/BlazorTable/BlazorTable.min.js"></script>
     <link rel="stylesheet" href="_content/Radzen.Blazor/css/default-base.css">
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
     <link rel="stylesheet" href="_content/Radzen.Blazor/css/default.css">
+    <script src="_content/Blazor.Fluxor/index.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = window.Stripe('pk_test_51HakXCLFPzNgSBSANeSzkeuB3Auq48VYiEnswBQRz957pA8rhSnfFnrqVAPQMqI1P8nIh0vkz2KgWHSLuL2Vx2Kn00S38a7TJd');
+
+        window.stripeCheckout = function (callBackInstance, amount, token) {
+            stripe.redirectToCheckout({
+                sessionId: token
+            }).then(function (result) {
+                // up to you
+            })
+        };
+    </script>
     <style>
         .inputstl {
             padding: 9px;

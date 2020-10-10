@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Blazored.LocalStorage;
 using BlazorStrap;
 using Syncfusion.Blazor;
+using Blazor.Fluxor;
 
 namespace MusicSellingApp.Client
 {
@@ -26,6 +27,7 @@ namespace MusicSellingApp.Client
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddBootstrapCss();
             builder.Services.AddSyncfusionBlazor();
+            builder.Services.AddFluxor(options => options.UseDependencyInjection(typeof(Program).Assembly));
             await builder.Build().RunAsync();
         }
     }
