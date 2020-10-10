@@ -91,7 +91,7 @@ namespace ServicesTests
         }
 
         [Fact]
-        public async Task GetAllTest()
+        public async Task GetAllAlbumTest()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -100,9 +100,9 @@ namespace ServicesTests
             // Insert seed data into the database using one instance of the context
             using (var context = new ApplicationDbContext(options))
             {
-                context.Albums.Add(new Album { Id = 1, AlbumName = "Album 1" });
-                context.Albums.Add(new Album { Id = 2, AlbumName = "Album 2" });
-                context.Albums.Add(new Album { Id = 3, AlbumName = "Album 3"});
+                context.Albums.Add(new Album { Id = 100, AlbumName = "Album 1" });
+                context.Albums.Add(new Album { Id = 101, AlbumName = "Album 2" });
+                context.Albums.Add(new Album { Id = 102, AlbumName = "Album 3"});
                 context.SaveChanges();
             }
 
@@ -115,8 +115,6 @@ namespace ServicesTests
             Assert.Equal(3, albums.ToList().Count);
             }
         }
-
-
     }
 
 }
