@@ -2,6 +2,10 @@
 @inject ILocalStorageService localStorage
 @inject HttpClient client
 @inject IJSRuntime Js
+@using Blazor.Fluxor
+@inject IDispatcher Dispatcher
+@using Stripe.Checkout
+
 @if (Album != null)
 {
 
@@ -29,8 +33,8 @@
                     <input type="text" value="@quantity" name="quantity" maxlength="2" max="10" size="1" id="number" />
                     <input type="button" @onclick="@Increment" class="btn btn-success btn-number" value="+" />
                 </div>
-                <BSButton @onclick="AddToCart">Add to cart</BSButton>
-
+                @*<BSButton @onclick="AddToCart">Add to cart</BSButton>*@
+        <BSButton @onclick="@(e => CheckoutHandler(Album.AlbumName,Album.Description,Album.Price))">Buy Album</BSButton>
             }
 
         </BSCard>
@@ -41,14 +45,49 @@
 
 
 @code {
-    [Parameter] public Album Album { get; set; }
+    [Parameter] public  Album Album { get; set; }
     [Parameter] public EventCallback<long> OnDelete { get; set; }
     [Parameter] public User User { get; set; }
 
 
 
-    public int quantity = 1;
-    public  async Task AddToCart()
+    public static int quantity = 1;
+    public static async Task<string> CreateCheckoutSessionAsync(string albumName,string albumDescription,double albumPrice, string customerId = null)
+    {
+        Stripe.StripeConfiguration.ApiKey = "sk_test_51HakXCLFPzNgSBSAsmCE2RO37Zo89BoOkSEZgleUHByO1uXIk7bINT13OB8csqNMkoNwAXVyPwt5DqdDPH3EUaQl00tMImYyfH"; //Get it from your stripe dashboard
+        var options = new SessionCreateOptions
+        {
+            PaymentMethodTypes = new List<string>
+                {
+                    "card"
+                },
+            LineItems = new List<SessionLineItemOptions>
+                {
+                    new SessionLineItemOptions
+                    {
+                        Name = albumName,
+                        Description = albumDescription,
+                        Amount = Convert.ToInt32(albumPrice*100),
+                        Currency = "USD",
+                        Quantity = quantity
+                    }
+                },
+            SuccessUrl = "https://localhost:44368/success?session_id={CHECKOUT_SESSION_ID}",
+            CancelUrl = "https://localhost:44368/failed"
+        };
+
+        return (await new SessionService().CreateAsync(options)).Id;
+    }
+
+    private async Task CheckoutHandler(string albumName, string albumDescription,double price)
+    {
+        string sessionId = await CreateCheckoutSessionAsync(Album.AlbumName,Album.Description,price);
+
+        await Js.InvokeVoidAsync("redirectToCheckout", sessionId);
+    }
+
+
+    public async Task AddToCart()
     {
         if (User.GetType().Name == "Fan")
         {
@@ -58,12 +97,12 @@
             Console.WriteLine("Quantity" + order.Quantity);
             List<Order> orders = new List<Order>();
             orders.Add(order);
-            //Cart cart = new Cart(fan,orders); 
+            //Cart cart = new Cart(fan,orders);
             Cart cart = new Cart();
             cart.Fan = fan;
             //fan.Cart = cart;
             //await client.PutAsJsonAsync<Fan>($"/api/Fans/{fan.Id}", fan);
-            await client.PostAsJsonAsync<Cart>("api/Carts",cart);
+            await client.PostAsJsonAsync<Cart>("api/Carts", cart);
 
         }
     }

@@ -35,6 +35,7 @@
     bool loginError = false;
     string userType = "";
     List<Artist> artists = new List<Artist>();
+
     public async Task Authenticate()
     {
         await storageService.RemoveItemAsync("loggedUser");
