@@ -35,6 +35,19 @@ namespace MusicSellingApp.Server.Controllers
             return users;
         }
 
+
+
+        [HttpGet("NonArtist")]
+        public async Task<ActionResult<IEnumerable<User>>> GetNonAdminUser()
+        {
+            var fans = await _context.Fans.ToListAsync();
+            var artists = await _context.Artists.ToListAsync();
+            List<User> users = new List<User>();
+            users.AddRange(fans);
+            users.AddRange(artists);
+            return users;
+        }
+
         [HttpGet("Artists")]
         public Task<IEnumerable<User>> GetByType<Artist>()
         {
