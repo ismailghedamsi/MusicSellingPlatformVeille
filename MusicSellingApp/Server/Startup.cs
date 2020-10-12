@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using MusicSellingApp.Server.Services;
 using Newtonsoft.Json.Serialization;
 using Syncfusion.Blazor;
+using Stripe;
+using Blazored.LocalStorage;
 
 namespace MusicSellingApp.Server
 {
@@ -31,6 +33,11 @@ namespace MusicSellingApp.Server
                 services.AddSingleton<HttpClient>();
             }*/
 
+            services.AddMvc().AddJsonOptions(o =>
+            {
+                o.JsonSerializerOptions.PropertyNamingPolicy = null;
+                o.JsonSerializerOptions.DictionaryKeyPolicy = null;
+            });
 
             services.AddControllers().AddNewtonsoftJson(options =>
             {
@@ -46,6 +53,7 @@ namespace MusicSellingApp.Server
             services.AddControllersWithViews();
             services.AddSyncfusionBlazor();
             services.AddRazorPages();
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["pk_test_51HakXCLFPzNgSBSANeSzkeuB3Auq48VYiEnswBQRz957pA8rhSnfFnrqVAPQMqI1P8nIh0vkz2KgWHSLuL2Vx2Kn00S38a7TJd"];
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

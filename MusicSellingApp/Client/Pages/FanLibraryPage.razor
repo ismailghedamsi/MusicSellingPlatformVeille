@@ -1,0 +1,43 @@
+﻿@page "/fanLibrary"
+@inject ILocalStorageService storageService
+@inject HttpClient client
+@if (albums != null && albums.Count > 0)
+{
+    @foreach (var album in albums)
+    {
+        <BSCard CardType="CardType.Card">
+
+            <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="@album.Cover" alt="Card image cap" />
+
+            <BSCard CardType="CardType.Body">
+                <BSCard CardType="CardType.Title">Album Name : @album.AlbumName</BSCard>
+
+                <BSCard CardType="CardType.Subtitle">Genre @album.Genre</BSCard>
+
+                <BSCard CardType="CardType.Text">Album Description @album.Description</BSCard>
+
+            </BSCard>
+
+        </BSCard>
+        }
+    }else
+    {
+        <h2 style="background-color : orangered">You bought no album</h2>
+    }
+}
+
+
+@code {
+    List<FanAlbums> fanAlbums;
+    List<Album> albums;
+    Fan fan;
+
+    protected override async Task OnInitializedAsync()
+    {
+        fan = await storageService.GetItemAsync<Fan>("loggedUser");
+        Console.WriteLine($"/api/FanAlbums/Fan/{fan.Id}");
+        fanAlbums = await client.GetFromJsonAsync<List<FanAlbums>>("api/FanAlbums");
+        albums = fanAlbums.Where(fa => fa.Fan.Id == fan.Id).Select(fa => fa.Album).ToList();
+
+    }
+}
