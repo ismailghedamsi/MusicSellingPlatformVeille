@@ -7,27 +7,22 @@ namespace MusicSellingApp.Shared.Entitities
     public class Album
     {
 
-
+        public ICollection<FanAlbums> FanAlbums { get; set; }
         public long ArtistId { get; set; }
         public Artist Artist { get; set; }
         public long Id { get; set; }
         public string AlbumName { get; set; }
         [Required]
         public DateTime? ReleaseDate { get; set; }
-
         public Genre Genre { get; set; }
-
         public string Cover { get; set; }
-
         public double Price { get; set; }
-
         public string Description { get; set; }
 
         public Album()
         {
 
         }
-
 
         public Album(string albumName, DateTime releaseDate, Genre genre, string cover, double price, string description)
         {
@@ -52,7 +47,6 @@ namespace MusicSellingApp.Shared.Entitities
                    Price == album.Price &&
                    Description == album.Description;
         }
-
         public override int GetHashCode()
         {
             HashCode hash = new HashCode();

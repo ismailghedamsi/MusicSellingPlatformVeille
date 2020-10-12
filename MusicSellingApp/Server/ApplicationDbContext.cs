@@ -16,7 +16,6 @@ namespace MusicSellingApp.Server
         {
         }
 
-
         public DbSet<TodoItem> Todos { get; set; }
 
         public DbSet<Admin> Admins { get; set; }
@@ -35,21 +34,9 @@ namespace MusicSellingApp.Server
 
         public DbSet<TrackList> TrackLists { get; set; }
 
-
         public DbSet<User> Users { get; set; }
 
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    IConfigurationRoot configuration = new ConfigurationBuilder()
-        //    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-        //    .AddJsonFile("appsettings.json")
-        //    .Build();
-        //    optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-        //    optionsBuilder.EnableSensitiveDataLogging();
-        //    base.OnConfiguring(optionsBuilder);
-        //}
-
+        public DbSet<FanAlbums> FanAlbums { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,6 +45,17 @@ namespace MusicSellingApp.Server
             {
                 foreignKey.DeleteBehavior = DeleteBehavior.NoAction;
             }
+
+            modelBuilder.Entity<FanAlbums>()
+           .HasKey(bc => new { bc.FanId, bc.AlbumId });
+            modelBuilder.Entity<FanAlbums>()
+                .HasOne(bc => bc.Album)
+                .WithMany(b => b.FanAlbums)
+                .HasForeignKey(bc => bc.AlbumId);
+            modelBuilder.Entity<FanAlbums>()
+                .HasOne(bc => bc.Fan)
+                .WithMany(c => c.FanAlbums)
+                .HasForeignKey(bc => bc.FanId);
 
             modelBuilder.Entity<Fan>()
             .HasOne(c => c.Cart)
@@ -76,13 +74,12 @@ namespace MusicSellingApp.Server
     .       HasIndex(u => u.Email)
             .IsUnique();
 
-
             modelBuilder
-       .Entity<Album>()
-       .Property(e => e.Genre)
-       .HasConversion(
-           v => v.ToString(),
-           v => (Genre)Enum.Parse(typeof(Genre), v));
+            .Entity<Album>()
+            .Property(e => e.Genre)
+            .HasConversion(
+            v => v.ToString(),
+            v => (Genre)Enum.Parse(typeof(Genre), v));
             base.OnModelCreating(modelBuilder);
         }
     }
