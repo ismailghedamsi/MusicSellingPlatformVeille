@@ -33,12 +33,11 @@
                     <input type="text" value="@quantity" name="quantity" maxlength="2" max="10" size="1" id="number" />
                     <input type="button" @onclick="@Increment" class="btn btn-success btn-number" value="+" />
                 </div>
-                @*<BSButton @onclick="AddToCart">Add to cart</BSButton>*@
-        <BSButton @onclick="@(e => CheckoutHandler(Album.AlbumName,Album.Description,Album.Price))">Buy Album</BSButton>
+                <BSButton @onclick="AddToCart">Add to cart</BSButton>
+        <BSButton @onclick="@(e => CheckoutHandler(Album.Id,Album.AlbumName,Album.Description,Album.Price))">Buy Album</BSButton>
             }
 
         </BSCard>
-
     </BSCard>
 
 }
@@ -49,9 +48,8 @@
     [Parameter] public EventCallback<long> OnDelete { get; set; }
     [Parameter] public User User { get; set; }
 
-
-
     public static int quantity = 1;
+
     public static async Task<string> CreateCheckoutSessionAsync(string albumName,string albumDescription,double albumPrice, string customerId = null)
     {
         Stripe.StripeConfiguration.ApiKey = "sk_test_51HakXCLFPzNgSBSAsmCE2RO37Zo89BoOkSEZgleUHByO1uXIk7bINT13OB8csqNMkoNwAXVyPwt5DqdDPH3EUaQl00tMImYyfH"; //Get it from your stripe dashboard
@@ -72,20 +70,35 @@
                         Quantity = quantity
                     }
                 },
-            SuccessUrl = "https://localhost:44368/success?session_id={CHECKOUT_SESSION_ID}",
+            SuccessUrl = "https://localhost:44368/fanLibrary?session_id={CHECKOUT_SESSION_ID}",
             CancelUrl = "https://localhost:44368/failed"
         };
 
         return (await new SessionService().CreateAsync(options)).Id;
     }
 
-    private async Task CheckoutHandler(string albumName, string albumDescription,double price)
+    private async Task CheckoutHandler(long id,string albumName, string albumDescription,double price)
     {
         string sessionId = await CreateCheckoutSessionAsync(Album.AlbumName,Album.Description,price);
 
-        await Js.InvokeVoidAsync("redirectToCheckout", sessionId);
-    }
 
+        if (User.GetType().Name == "Fan")
+        {
+
+            Fan fan = (Fan)User;
+            Fan fullFan = await client.GetFromJsonAsync<Fan>($"api/Fans/{fan.Id}");
+            FanAlbums fanAlbum = new FanAlbums() {
+                FanId = fullFan.Id,
+                AlbumId = Album.Id
+            };
+
+            await client.PostAsJsonAsync<FanAlbums>($"/api/FanAlbums", fanAlbum);
+
+        }
+        await Js.InvokeVoidAsync("redirectToCheckout", sessionId);
+        await localStorage.SetItemAsync<string>("boughtAlbum",albumName);
+
+    }
 
     public async Task AddToCart()
     {
@@ -94,14 +107,10 @@
 
             Fan fan = (Fan)User;
             Order order = new Order(Album, quantity);
-            Console.WriteLine("Quantity" + order.Quantity);
             List<Order> orders = new List<Order>();
             orders.Add(order);
-            //Cart cart = new Cart(fan,orders);
             Cart cart = new Cart();
             cart.Fan = fan;
-            //fan.Cart = cart;
-            //await client.PutAsJsonAsync<Fan>($"/api/Fans/{fan.Id}", fan);
             await client.PostAsJsonAsync<Cart>("api/Carts", cart);
 
         }
@@ -121,4 +130,4 @@
     {
         navigationManager.NavigateTo($"/albums/edit/{albumId}");
     }
-}
+    }
