@@ -8,12 +8,15 @@
 
   <ItemGroup>
     <PackageReference Include="Blazor.Fluxor" Version="2.0.1" />
+    <PackageReference Include="BlazorInputFile" Version="0.2.0" />
     <PackageReference Include="BlazorTable" Version="1.13.1" />
+    <PackageReference Include="MailKit" Version="2.9.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="Radzen.Blazor" Version="2.15.9" />
     <PackageReference Include="RhinoMocks" Version="4.0.0-alpha3" />
     <PackageReference Include="Stripe.net" Version="39.13.0" />
     <PackageReference Include="Syncfusion.Blazor" Version="18.3.0.38" />
+    <PackageReference Include="Tewr.Blazor.FileReader" Version="3.0.0-5rc1.20274" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.assert" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />

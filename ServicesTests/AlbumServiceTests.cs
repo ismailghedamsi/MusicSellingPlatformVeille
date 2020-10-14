@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -21,6 +22,34 @@ namespace ServicesTests
 
         public AlbumServiceTests()
         {
+        }
+
+        [Fact]
+        public void MailTest()
+        {
+            try
+            {
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress("ismailghedamsi@gmail.com");
+                    mail.To.Add("ismailghedamsi@gmail.com");
+                    mail.Subject = "Sending mail";
+                    mail.Body = "<h2>this is a mail body</h2>";
+                    mail.IsBodyHtml = true;
+                    using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                    {
+                        smtp.Credentials = new System.Net.NetworkCredential("ismailghedamsi@gmail.com", "Idarnastsrias1");
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            Assert.True(true);
         }
 
         [Fact]
