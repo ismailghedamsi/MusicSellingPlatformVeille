@@ -42,11 +42,10 @@ namespace MusicSellingApp.Server.Controllers
             return fanAlbums;
         }
 
-        [HttpGet("/Fan/{id}")]
+        [HttpGet("Fan/{id}")]
         public async Task<ActionResult<List<FanAlbums>>> GetAlbumsByFanId(long fanId)
         {
             var fanAlbums = await _context.FanAlbums.Where(fa => fa.FanId == fanId).ToListAsync();
-
             if (fanAlbums == null)
             {
                 return NotFound();

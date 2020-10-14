@@ -33,7 +33,6 @@
                     <input type="text" value="@quantity" name="quantity" maxlength="2" max="10" size="1" id="number" />
                     <input type="button" @onclick="@Increment" class="btn btn-success btn-number" value="+" />
                 </div>
-                <BSButton @onclick="AddToCart">Add to cart</BSButton>
         <BSButton @onclick="@(e => CheckoutHandler(Album.Id,Album.AlbumName,Album.Description,Album.Price))">Buy Album</BSButton>
             }
 
@@ -100,21 +99,6 @@
 
     }
 
-    public async Task AddToCart()
-    {
-        if (User.GetType().Name == "Fan")
-        {
-
-            Fan fan = (Fan)User;
-            Order order = new Order(Album, quantity);
-            List<Order> orders = new List<Order>();
-            orders.Add(order);
-            Cart cart = new Cart();
-            cart.Fan = fan;
-            await client.PostAsJsonAsync<Cart>("api/Carts", cart);
-
-        }
-    }
 
     public void Increment()
     {

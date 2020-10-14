@@ -2,7 +2,8 @@
 @inject HttpClient client
 @inject ILocalStorageService storageService
 @inject NavigationManager navigationManager
-
+@using BlazorInputFile
+@using System.IO
 <h3>ArtistsAlbums</h3>
 
 <div class="container">
@@ -46,7 +47,12 @@
             <InputText class="form-control inputstl" @bind-Value="Album.Cover" />
         </div>
 
+        <div class="form-group">
+            <label>Upload file </label>
+            <InputFile OnChange="HandleSelection">
 
+            </InputFile>
+        </div>
         <div class="form-group">
             <button class="btn btn-primary" type="submit">Add Album </button>
         </div>
@@ -79,87 +85,104 @@
 
 </div>
 
-  
 
 
 
-    @code {
 
-        bool shouldDisplayNoAlbumMessage = false;
-        bool shouldShowWaitingMessage = true;
-        Artist artist;
-        long artistId;
-        public List<Album> albums = new List<Album>();
+@code {
+    bool shouldDisplayNoAlbumMessage = false;
+    bool shouldShowWaitingMessage = true;
+    Artist artist;
+    long artistId;
+    public List<Album> albums = new List<Album>();
 
-        public Album Album { get; set; } = new Album();
-        string artistName = "";
+    public Album Album { get; set; } = new Album();
+    string artistName = "";
 
-        protected override async Task OnInitializedAsync()
+    async Task HandleSelection(IFileListEntry[] files)
+    {
+        var file = files.FirstOrDefault();
+        if (file != null)
         {
-            shouldShowWaitingMessage = true;
+            // Just load into .NET memory to show it can be done
+            // Alternatively it could be saved to disk, or parsed in memory, or similar
+            var ms = new MemoryStream();
+            await file.Data.CopyToAsync(ms);
+
+            var content = new MultipartFormDataContent {
+                { new ByteArrayContent(ms.GetBuffer()), "\"upload\"", file.Name }
+            };
+            await client.PostAsync("upload", content);
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        shouldShowWaitingMessage = true;
+        artist = await storageService.GetItemAsync<Artist>("loggedUser");
+        shouldShowWaitingMessage = false;
+        if (artist != null)
+        {
+
+            artistId = artist.Id;
+            albums = await client.GetFromJsonAsync<List<Album>>($"api/Albums/{artistId}");
+        }
+        else
+        {
+            shouldDisplayNoAlbumMessage = true;
+        }
+    }
+
+
+
+    public async Task AddAlbum()
+    {
+        if (artist != null)
+        {
+            artist.Discography.Add(Album);
+            await client.PutAsJsonAsync<Album>($"/api/Artists/{artist.Id}", Album);
+            StateHasChanged();
             artist = await storageService.GetItemAsync<Artist>("loggedUser");
-            shouldShowWaitingMessage = false;
             if (artist != null)
             {
 
                 artistId = artist.Id;
                 albums = await client.GetFromJsonAsync<List<Album>>($"api/Albums/{artistId}");
             }
-            else
-            {
-                shouldDisplayNoAlbumMessage = true;
-            }
-        }
-
-
-
-        public async Task AddAlbum()
-        {
-            if (artist != null)
-            {
-                artist.Discography.Add(Album);
-                await client.PutAsJsonAsync<Album>($"/api/Artists/{artist.Id}", Album);
-                StateHasChanged();
-                artist = await storageService.GetItemAsync<Artist>("loggedUser");
-                if (artist != null)
-                {
-
-                    artistId = artist.Id;
-                    albums = await client.GetFromJsonAsync<List<Album>>($"api/Albums/{artistId}");
-                }
-
-            }
-        }
-
-        public void UpdateAlbum(long id)
-        {
-            //await client.PutAsJsonAsync<Album>($"api/Albums/{artistId}",Album);
 
         }
+    }
 
-        public async Task DeleteAlbum(long id)
-        {
-            Console.WriteLine(id);
-            await client.DeleteAsync($"api/Albums/{id}");
-            albums = await client.GetFromJsonAsync<List<Album>>($"api/Albums/{artistId}");
-        }
-
+    public void UpdateAlbum(long id)
+    {
+        //await client.PutAsJsonAsync<Album>($"api/Albums/{artistId}",Album);
 
     }
 
-    <style>
-        h3 {
-            color: yellow;
-        }
-
-        body {
-            background-color: yellow;
-        }
+    public async Task DeleteAlbum(long id)
+    {
+        await client.DeleteAsync($"api/Albums/{id}");
+        albums = await client.GetFromJsonAsync<List<Album>>($"api/Albums/{artistId}");
+    }
 
 
+}
 
-        img {
-            width: 250px;
-            height: 250px;
-        }
-    </style>
+<style>
+    h3 {
+        color: yellow;
+    }
+
+    body {
+        background-color: yellow;
+    }
+
+
+
+    img {
+        width: 250px;
+        height: 250px;
+    }
+</style>

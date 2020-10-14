@@ -64,8 +64,6 @@
         if(artist != null)
         {
             artist.Discography.Add(album);
-            Console.WriteLine(artist.Id);
-            Console.WriteLine($"api/Artists/{artist.Id}");
             await httpClient.PutAsJsonAsync<Album>($"/api/Artists/{artist.Id}", album);
             StateHasChanged();
             NavigationManager.NavigateTo("ArtistAlbums2");

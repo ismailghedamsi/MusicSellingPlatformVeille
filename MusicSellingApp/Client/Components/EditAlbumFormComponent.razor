@@ -55,7 +55,6 @@
     protected override async Task OnInitializedAsync()
     {
         artist = await storageService.GetItemAsync<Artist>("loggedUser");
-        Console.WriteLine("oninitialized editalbymformcomponent"+AlbumId + " "+artist.Id);
         album = await httpClient.GetFromJsonAsync<Album>($"api/Albums/{artist.Id}/{AlbumId}");
 
     }

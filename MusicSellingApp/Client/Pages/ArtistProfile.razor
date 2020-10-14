@@ -1,11 +1,13 @@
 ﻿@page "/artistProfile"
 @inject ILocalStorageService storageService
-    <h2>@(artist == null)</h2>
-   <UserInfoComponent User="@artist" />
+@using System.Net.Mail
+<h2>@(artist == null)</h2>
+<UserInfoComponent User="@artist" />
 
 
 @code{
     Artist artist;
+
     protected override async Task OnInitializedAsync()
     {
         artist = await storageService.GetItemAsync<Artist>("loggedUser");

@@ -70,7 +70,7 @@
                 </NavLink>
             </li>
 
-            
+
         }
         else if (user != null && user.Descriminator == "Admin")
         {
@@ -90,7 +90,6 @@
     protected override async Task OnParametersSetAsync()
     {
         user = await storageService.GetItemAsync<User>("loggedUser");
-        Console.WriteLine(user == null);
 
     }
 
@@ -98,7 +97,6 @@
     protected override async Task OnInitializedAsync()
     {
         user = await storageService.GetItemAsync<User>("loggedUser");
-        Console.WriteLine(user == null);
     }
 
     public User user { get; set; }
