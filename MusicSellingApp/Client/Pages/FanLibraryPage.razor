@@ -1,43 +1,81 @@
 ﻿@page "/fanLibrary"
 @inject ILocalStorageService storageService
 @inject HttpClient client
+@inject IJSRuntime js
+@using System.IO
 @if (albums != null && albums.Count > 0)
 {
-    @foreach (var album in albums)
-    {
-        <BSCard CardType="CardType.Card">
+    <div class="mat-layout-grid-inner">
+        @foreach (var album in albums)
+        {
+            <div class="mat-layout-grid-cell">
+                <BSCard CardType="CardType.Card">
 
-            <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="@album.Cover" alt="Card image cap" />
+                    <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="@album.Cover" alt="Card image cap" />
 
-            <BSCard CardType="CardType.Body">
-                <BSCard CardType="CardType.Title">Album Name : @album.AlbumName</BSCard>
+                    <BSCard CardType="CardType.Body">
+                        <BSCard CardType="CardType.Title">Album Name : @album.AlbumName</BSCard>
 
-                <BSCard CardType="CardType.Subtitle">Genre @album.Genre</BSCard>
+                        <BSCard CardType="CardType.Subtitle">Genre @album.Genre</BSCard>
 
-                <BSCard CardType="CardType.Text">Album Description @album.Description</BSCard>
+                        <BSCard CardType="CardType.Text">Album Description @album.Description</BSCard>
+                        <button @onclick="DownloadFile">Download to client</button>
+                    </BSCard>
 
-            </BSCard>
-
-        </BSCard>
+                </BSCard>
+            </div>
         }
-    }else
-    {
-        <h2 style="background-color : orangered">You bought no album</h2>
-    }
+    </div>
 }
+    }
 
 
 @code {
     List<FanAlbums> fanAlbums;
-    List<Album> albums;
+    List<Album> albums = new List<Album>();
     Fan fan;
+    byte[] data;
+
+    async Task DownloadFile()
+    {
+        data = await client.GetByteArrayAsync("api/DataFetcher");
+        await MusicSellingApp.Client.Utils.FileUtil.SaveAs(js, "Anghellic.rar", data);
+    }
+
+    public void OnClickDownloadButton()
+    {
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        fan = await storageService.GetItemAsync<Fan>("loggedUser");
-        Console.WriteLine($"/api/FanAlbums/Fan/{fan.Id}");
-        fanAlbums = await client.GetFromJsonAsync<List<FanAlbums>>("api/FanAlbums");
-        albums = fanAlbums.Where(fa => fa.Fan.Id == fan.Id).Select(fa => fa.Album).ToList();
 
+
+        fan = await storageService.GetItemAsync<Fan>("loggedUser");
+        fanAlbums = await client.GetFromJsonAsync<List<FanAlbums>>("api/FanAlbums");
+        foreach (var fanAlbum in fanAlbums)
+        {
+            if (fanAlbum.FanId == fan.Id)
+            {
+                albums.Add(fanAlbum.Album);
+            }
+        }
     }
 }
+
+<style>
+    h3 {
+        color: yellow;
+    }
+
+    body {
+        background-color: yellow;
+    }
+
+
+
+    img {
+        width: 250px;
+        height: 250px;
+    }
+</style>
+

@@ -18,7 +18,20 @@
     <link rel="stylesheet" href="_content/Radzen.Blazor/css/default.css">
     <script src="js/scripts.js"></script>
     <script src="_content/Blazor.Fluxor/index.js"></script>
+    <script src="inputfile.js"></script>
+    <script src="https://cdn.syncfusion.com/blazor/18.3.35/syncfusion-blazor.min.js"></script>
+    <script src="_content/BlazorInputFile/inputfile.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript">
+        function saveAsFile(filename, bytesBase64) {
+            var link = document.createElement('a');
+            link.download = filename;
+            link.href = "data:application/octet-stream;base64," + bytesBase64;
+            document.body.appendChild(link); // Needed for Firefox
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 
 
     <style>
