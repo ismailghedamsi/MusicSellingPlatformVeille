@@ -19,6 +19,8 @@ namespace MusicSellingApp.Shared.Entitities
         public double Price { get; set; }
         public string Description { get; set; }
 
+        public string StringifiedFile { get; set; }
+
         public Album()
         {
 

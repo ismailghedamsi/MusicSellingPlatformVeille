@@ -38,6 +38,8 @@ namespace MusicSellingApp.Server
 
         public DbSet<FanAlbums> FanAlbums { get; set; }
 
+        public DbSet<UploadedFile> UploadedFiles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -47,7 +49,7 @@ namespace MusicSellingApp.Server
             }
 
             modelBuilder.Entity<FanAlbums>()
-           .HasKey(bc => new { bc.FanId, bc.AlbumId });
+           .HasKey(bc => new { bc.FanId, bc.AlbumId,bc.Id });
             modelBuilder.Entity<FanAlbums>()
                 .HasOne(bc => bc.Album)
                 .WithMany(b => b.FanAlbums)

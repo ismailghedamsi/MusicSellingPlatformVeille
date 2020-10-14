@@ -11,6 +11,9 @@ using Newtonsoft.Json.Serialization;
 using Syncfusion.Blazor;
 using Stripe;
 using Blazored.LocalStorage;
+using System.Threading.Tasks;
+using Microsoft.JSInterop;
+using System;
 
 namespace MusicSellingApp.Server
 {
@@ -22,6 +25,17 @@ namespace MusicSellingApp.Server
         }
 
         public IConfiguration Configuration { get; }
+
+        public static class FileUtil
+        {
+            public async static Task SaveAs(IJSRuntime js, string filename, byte[] data)
+            {
+                await js.InvokeAsync<object>(
+                    "saveAsFile",
+                    filename,
+                    Convert.ToBase64String(data));
+            }
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940

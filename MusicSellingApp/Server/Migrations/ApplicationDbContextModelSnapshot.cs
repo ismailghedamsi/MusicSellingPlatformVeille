@@ -49,6 +49,9 @@ namespace MusicSellingApp.Server.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("StringifiedFile")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ArtistId");
@@ -85,7 +88,7 @@ namespace MusicSellingApp.Server.Migrations
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
 
-                    b.HasKey("FanId", "AlbumId");
+                    b.HasKey("FanId", "AlbumId", "Id");
 
                     b.HasIndex("AlbumId");
 
@@ -162,6 +165,21 @@ namespace MusicSellingApp.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TrackLists");
+                });
+
+            modelBuilder.Entity("MusicSellingApp.Shared.Entitities.UploadedFile", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("stringifiedFile")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UploadedFiles");
                 });
 
             modelBuilder.Entity("MusicSellingApp.Shared.Entitities.User", b =>
